@@ -40,9 +40,12 @@ namespace ProjectManagement.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProjectManagement.API v1"));
             }
+            
+            // For now, Swagger in production
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProjectManagement.API v1"));
+            // end swagger
 
             app.UseHttpsRedirection();
 
