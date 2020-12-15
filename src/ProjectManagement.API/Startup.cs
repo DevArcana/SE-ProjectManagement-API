@@ -67,7 +67,7 @@ namespace ProjectManagement.API
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter 'Bearer [space] [token]'"
+                    Description = "Enter 'Bearer [token]'"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement  
