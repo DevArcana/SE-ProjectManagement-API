@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ProjectManagement.API.Persistence;
 using Serilog;
 using Serilog.Events;
 
@@ -26,7 +29,21 @@ namespace ProjectManagement.API
             try
             {
                 Log.Information("Starting web host");
-                CreateHostBuilder(args).Build().Run();
+                var host = CreateHostBuilder(args).Build();
+
+                using (var scope = host.Services.CreateScope())
+                {
+                    var database = scope.ServiceProvider.GetService<ApplicationDbContext>()?.Database;
+
+                    if (database == null)
+                    {
+                        throw new ApplicationException("Database isn't configured properly!");
+                    }
+                    
+                    database.Migrate();
+                }
+                
+                host.Run();
                 return 0;
             }
             catch (Exception exception)
