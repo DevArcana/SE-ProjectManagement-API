@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ProjectManagement.API.Persistance
+namespace ProjectManagement.API.Persistence
 {
-    public static class PersistanceExtensions
+    public static class PersistenceExtensions
     {
-        public static IServiceCollection AddPersistance(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {

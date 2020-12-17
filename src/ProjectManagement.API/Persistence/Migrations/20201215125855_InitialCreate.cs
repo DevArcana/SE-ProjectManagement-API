@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ProjectManagement.API.Persistance.Migrations
+namespace ProjectManagement.API.Persistence.Migrations
 {
     public partial class InitialCreate : Migration
     {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.API.Users.Entities;
 
-namespace ProjectManagement.API.Persistance
+namespace ProjectManagement.API.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

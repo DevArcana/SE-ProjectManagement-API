@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using ProjectManagement.API.Persistance;
+using ProjectManagement.API.Persistence;
 using ProjectManagement.API.Users.Entities;
 using Serilog;
 
@@ -28,7 +28,7 @@ namespace ProjectManagement.API
         {
             services.AddControllers();
 
-            services.AddPersistance(Configuration);
+            services.AddPersistence(Configuration);
             
             // Identity
             services.AddIdentity<ApplicationUser, IdentityRole>()

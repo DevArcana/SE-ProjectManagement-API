@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProjectManagement.API.Persistance;
+using ProjectManagement.API.Persistence;
 
-namespace ProjectManagement.API.Persistance.Migrations
+namespace ProjectManagement.API.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20201215125855_InitialCreate")]
