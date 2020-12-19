@@ -1,0 +1,13 @@
+﻿using System.Threading;
+using System.Threading.Tasks;
+using ProjectManagement.API.Domain.Projects.Entities;
+using ProjectManagement.API.Domain.Projects.Models;
+using ProjectManagement.API.Domain.Users.Entities;
+
+namespace ProjectManagement.API.Domain.Projects.Interfaces
+{
+    public interface IProjectsService
+    {
+        Task<ProjectDto> CreateProjectAsync(ApplicationUser manager, string name, CancellationToken cancellationToken = default);
+    }
+}

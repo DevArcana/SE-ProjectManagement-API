@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using ProjectManagement.API.Persistence;
+using ProjectManagement.API.Infrastructure.Persistence;
 using Serilog;
 using Serilog.Events;
 

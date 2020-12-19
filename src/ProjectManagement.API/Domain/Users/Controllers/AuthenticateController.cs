@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using ProjectManagement.API.Users.Entities;
-using ProjectManagement.API.Users.Models;
+using ProjectManagement.API.Domain.Users.Entities;
+using ProjectManagement.API.Domain.Users.Models;
 
-namespace ProjectManagement.API.Users.Controllers
+namespace ProjectManagement.API.Domain.Users.Controllers
 {
     [Route("api/[controller]")]
     public class AuthenticateController : ControllerBase

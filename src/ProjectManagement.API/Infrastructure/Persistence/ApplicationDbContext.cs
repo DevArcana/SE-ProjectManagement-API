@@ -1,9 +1,10 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using ProjectManagement.API.Users.Entities;
+using ProjectManagement.API.Domain.Projects.Entities;
+using ProjectManagement.API.Domain.Users.Entities;
 
-namespace ProjectManagement.API.Persistence
+namespace ProjectManagement.API.Infrastructure.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -18,5 +19,7 @@ namespace ProjectManagement.API.Persistence
 
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
+        
+        public DbSet<Project> Projects { get; set; }
     }
 }
