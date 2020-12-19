@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ProjectManagement.API.Common.Exceptions;
 using ProjectManagement.API.Domain.Projects.Entities;
 using ProjectManagement.API.Domain.Projects.Interfaces;
 using ProjectManagement.API.Domain.Projects.Models;
@@ -31,8 +32,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
 
             if (project != null)
             {
-                // TODO: Suggest a better strategy
-                return null;
+                throw new EntityAlreadyExistsException($"Project {name} already exists!");
             }
             
             project = new Project(manager, name);

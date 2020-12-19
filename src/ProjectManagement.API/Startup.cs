@@ -1,14 +1,19 @@
+using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
+using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ProjectManagement.API.Common.Exceptions;
 using ProjectManagement.API.Domain.Projects;
 using ProjectManagement.API.Domain.Users.Entities;
 using ProjectManagement.API.Infrastructure;
@@ -90,9 +95,24 @@ namespace ProjectManagement.API
                                 Id = "Bearer"  
                             }  
                         },
-                        System.Array.Empty<string>()
+                        Array.Empty<string>()
                     }  
                 });
+            });
+
+            services.AddProblemDetails(setup =>
+            {
+                setup.IncludeExceptionDetails = (context, exception) => false;
+                
+                setup.OnBeforeWriteDetails = (context, details) =>
+                {
+                    details.Instance = context.Request.Path;
+                };
+                
+                DomainProblemDetails.Map(setup);
+                EntityAlreadyExistsProblemDetails.Map(setup);
+                
+                setup.Map<ValidationException>(exception => new ValidationProblemDetails(new Dictionary<string, string[]> {{exception.Message, new []{exception.Description}}}));
             });
         }
 
@@ -117,6 +137,8 @@ namespace ProjectManagement.API
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseProblemDetails();
 
             app.UseEndpoints(endpoints =>
             {

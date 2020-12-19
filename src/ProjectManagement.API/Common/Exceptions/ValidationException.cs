@@ -1,8 +1,12 @@
-﻿namespace ProjectManagement.API.Common.Exceptions
+﻿using Hellang.Middleware.ProblemDetails;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ProjectManagement.API.Common.Exceptions
 {
     public class ValidationException : DomainException
     {
-        public ValidationException(string message) : base(message)
+        public ValidationException(string propertyName, string message) : base(propertyName, message)
         {
             
         }
