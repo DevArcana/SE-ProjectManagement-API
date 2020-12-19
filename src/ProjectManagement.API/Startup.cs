@@ -6,6 +6,7 @@ using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -109,10 +110,8 @@ namespace ProjectManagement.API
                     details.Instance = context.Request.Path;
                 };
                 
-                DomainProblemDetails.Map(setup);
-                EntityAlreadyExistsProblemDetails.Map(setup);
-                
-                setup.Map<ValidationException>(exception => new ValidationProblemDetails(new Dictionary<string, string[]> {{exception.Message, new []{exception.Description}}}));
+                EntityAlreadyExistsException.Map(setup);
+                PropertyValidationException.Map(setup);
             });
         }
 
@@ -137,7 +136,7 @@ namespace ProjectManagement.API
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            
             app.UseProblemDetails();
 
             app.UseEndpoints(endpoints =>

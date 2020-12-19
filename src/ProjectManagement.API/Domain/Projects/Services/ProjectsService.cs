@@ -32,7 +32,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
 
             if (project != null)
             {
-                throw new EntityAlreadyExistsException($"Project {name} already exists!");
+                throw new EntityAlreadyExistsException("Project already exists", $"Project {name} already exists");
             }
             
             project = new Project(manager, name);
