@@ -8,8 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using ProjectManagement.API.Persistence;
-using ProjectManagement.API.Users.Entities;
+using ProjectManagement.API.Domain.Projects;
+using ProjectManagement.API.Domain.Users.Entities;
+using ProjectManagement.API.Infrastructure;
+using ProjectManagement.API.Infrastructure.Persistence;
 using Serilog;
 
 namespace ProjectManagement.API
@@ -28,7 +30,7 @@ namespace ProjectManagement.API
         {
             services.AddControllers();
 
-            services.AddPersistence(Configuration);
+            services.AddInfrastructure(Configuration);
             
             // Identity
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -55,6 +57,9 @@ namespace ProjectManagement.API
                     };
                 });
             // End Identity
+            
+            // Domain services
+            services.AddProjects(Configuration);
 
             services.AddSwaggerGen(c =>
             {
