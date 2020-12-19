@@ -44,5 +44,15 @@ namespace ProjectManagement.API.Domain.Projects.Services
             
             return _mapper.Map<ProjectDto>(project);
         }
+
+        public async Task<ProjectDto> GetProjectById(ApplicationUser user, long id, CancellationToken cancellationToken = default)
+        {
+            // TODO: Add access lists instead of relying on being a manager
+            var project = await _context.Projects
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id && x.Manager.Id == user.Id, cancellationToken);
+
+            return project == null ? null : _mapper.Map<ProjectDto>(project);
+        }
     }
 }
