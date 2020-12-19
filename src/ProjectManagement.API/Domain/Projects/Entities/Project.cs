@@ -1,5 +1,4 @@
-﻿using System;
-using ProjectManagement.API.Common.Entities;
+﻿using ProjectManagement.API.Common.Entities;
 using ProjectManagement.API.Common.Exceptions;
 using ProjectManagement.API.Domain.Users.Entities;
 
@@ -17,19 +16,14 @@ namespace ProjectManagement.API.Domain.Projects.Entities
 
         public void AssignManager(ApplicationUser manager)
         {
-            if (manager == null)
-            {
-                throw new ValidationException(nameof(manager), "Manager must not be null!");
-            }
-
-            Manager = manager;
+            Manager = manager ?? throw new PropertyValidationException(nameof(manager), "Manager must not be null!");
         }
 
         public void Rename(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ValidationException(nameof(name), "Project's name must not be empty!");
+                throw new PropertyValidationException(nameof(name), "Project's name must not be empty!");
             }
 
             Name = name;

@@ -1,22 +1,21 @@
-﻿using Hellang.Middleware.ProblemDetails;
+﻿using System;
+using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ProjectManagement.API.Common.Exceptions
 {
-    public class EntityAlreadyExistsException : DomainException
+    public class EntityAlreadyExistsException : Exception
     {
-        public EntityAlreadyExistsException(string message) : base("already exists", message)
+        public string Description { get; }
+        public EntityAlreadyExistsException(string message, string description) : base(message)
         {
-            
+            Description = description;
         }
-    }
-    
-    public class EntityAlreadyExistsProblemDetails : ProblemDetails
-    {
+        
         public static void Map(ProblemDetailsOptions setup)
         {
-            setup.Map<EntityAlreadyExistsException>(exception => new EntityAlreadyExistsProblemDetails
+            setup.Map<EntityAlreadyExistsException>(exception => new ProblemDetails
             {
                 Title = exception.Message,
                 Detail = exception.Description,
