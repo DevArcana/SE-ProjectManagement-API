@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.API.Domain.Projects.Interfaces;
@@ -35,8 +36,21 @@ namespace ProjectManagement.API.Domain.Projects.Controllers
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var project = await _projectsService.GetProjectById(user, id);
-            
-            return project != null ? Ok(project) : NotFound($"Project {id} does not exist or you do not have access to it.");
+
+            if (project == null)
+            {
+                var problem = new ProblemDetails
+                {
+                    Instance = HttpContext.Request.Path,
+                    Status = StatusCodes.Status404NotFound,
+                    Type = $"https://httpstatuses.com/404",
+                    Title = "Not found",
+                    Detail = $"Project {id} does not exist or you do not have access to it."
+                };
+
+                return NotFound(problem);
+            }
+            return Ok(project);
         }
     }
 }

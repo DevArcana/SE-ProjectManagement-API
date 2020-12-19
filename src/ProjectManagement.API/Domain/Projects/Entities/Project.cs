@@ -1,5 +1,6 @@
 ﻿using System;
 using ProjectManagement.API.Common.Entities;
+using ProjectManagement.API.Common.Exceptions;
 using ProjectManagement.API.Domain.Users.Entities;
 
 namespace ProjectManagement.API.Domain.Projects.Entities
@@ -18,7 +19,7 @@ namespace ProjectManagement.API.Domain.Projects.Entities
         {
             if (manager == null)
             {
-                throw new ArgumentNullException(nameof(manager), "Manager must not be null!");
+                throw new ValidationException(nameof(manager), "Manager must not be null!");
             }
 
             Manager = manager;
@@ -28,7 +29,7 @@ namespace ProjectManagement.API.Domain.Projects.Entities
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentNullException(nameof(name), "Project's name must not be empty!");
+                throw new ValidationException(nameof(name), "Project's name must not be empty!");
             }
 
             Name = name;
