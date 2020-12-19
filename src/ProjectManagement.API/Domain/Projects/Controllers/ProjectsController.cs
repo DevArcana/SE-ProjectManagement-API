@@ -33,7 +33,10 @@ namespace ProjectManagement.API.Domain.Projects.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProjectById(long id)
         {
-            return NotFound();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var project = await _projectsService.GetProjectById(user, id);
+            
+            return project != null ? Ok(project) : NotFound($"Project {id} does not exist or you do not have access to it.");
         }
     }
 }
