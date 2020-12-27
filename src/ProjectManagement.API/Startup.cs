@@ -42,6 +42,8 @@ namespace ProjectManagement.API
             // Identity
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
+                    options.User.RequireUniqueEmail = true;
+                    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
                     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
