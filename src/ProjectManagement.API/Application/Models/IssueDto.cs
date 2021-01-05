@@ -1,7 +1,7 @@
 ﻿using ProjectManagement.API.Domain.Issues.Entities;
 using ProjectManagement.API.Infrastructure.AutoMapper;
 
-namespace ProjectManagement.API.Domain.Issues.Model
+namespace ProjectManagement.API.Application.Models
 {
     public class IssueDto : IMapFrom<Issue>
     {

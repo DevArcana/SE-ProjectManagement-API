@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.API.Application.Interfaces;
+using ProjectManagement.API.Application.Models;
 using ProjectManagement.API.Domain.Projects.Interfaces;
-using ProjectManagement.API.Domain.Projects.Models;
 using ProjectManagement.API.Domain.Users.Entities;
 
 namespace ProjectManagement.API.Application.AppServices

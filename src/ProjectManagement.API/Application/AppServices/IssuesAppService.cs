@@ -7,8 +7,8 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.API.Application.Interfaces;
+using ProjectManagement.API.Application.Models;
 using ProjectManagement.API.Domain.Issues.Interfaces;
-using ProjectManagement.API.Domain.Issues.Model;
 using ProjectManagement.API.Domain.Users.Entities;
 
 namespace ProjectManagement.API.Application.AppServices

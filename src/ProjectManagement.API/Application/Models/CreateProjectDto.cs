@@ -1,4 +1,4 @@
-﻿namespace ProjectManagement.API.Domain.Projects.Models
+﻿namespace ProjectManagement.API.Application.Models
 {
     public class CreateProjectDto
     {

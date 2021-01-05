@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using ProjectManagement.API.Domain.Projects.Models;
+using ProjectManagement.API.Application.Models;
 using ProjectManagement.API.Domain.Users.Entities;
 
 namespace ProjectManagement.API.Application.Interfaces

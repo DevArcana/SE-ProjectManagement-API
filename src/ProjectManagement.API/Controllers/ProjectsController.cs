@@ -3,23 +3,24 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ProjectManagement.API.Application.Interfaces;
+using ProjectManagement.API.Application.Models;
 using ProjectManagement.API.Domain.Projects.Interfaces;
-using ProjectManagement.API.Domain.Projects.Models;
 using ProjectManagement.API.Domain.Users.Entities;
 
-namespace ProjectManagement.API.Domain.Projects.Controllers
+namespace ProjectManagement.API.Controllers
 {
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
     public class ProjectsController : ControllerBase
     {
-        private readonly IProjectsService _projectsService;
+        private readonly IProjectsAppService _projectsAppService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ProjectsController(IProjectsService projectsService, UserManager<ApplicationUser> userManager)
+        public ProjectsController(IProjectsAppService projectsService, UserManager<ApplicationUser> userManager)
         {
-            _projectsService = projectsService;
+            _projectsAppService = projectsService;
             _userManager = userManager;
         }
 
@@ -27,7 +28,7 @@ namespace ProjectManagement.API.Domain.Projects.Controllers
         public async Task<IActionResult> CreateProject([FromBody] CreateProjectDto dto)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var project = await _projectsService.CreateProjectAsync(user, dto.Name);
+            var project = await _projectsAppService.CreateProjectAsync(user, dto.Name);
             return CreatedAtAction(nameof(GetProjectById), new {Id = project.Id}, project);
         }
 
@@ -35,7 +36,7 @@ namespace ProjectManagement.API.Domain.Projects.Controllers
         public async Task<IActionResult> GetProjectById(long id)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var project = await _projectsService.GetProjectById(user, id);
+            var project = await _projectsAppService.GetProjectById(user, id);
 
             if (project == null)
             {
