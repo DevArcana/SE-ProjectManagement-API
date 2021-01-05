@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.API.Common.Exceptions;
@@ -58,12 +59,13 @@ namespace ProjectManagement.API.Domain.Projects.Services
         }
         public async Task<IEnumerable<ProjectDto>> GetProjects(ApplicationUser user, CancellationToken cancellationToken = default)
         {
-            var projects = await _context.Projects
+            var projects = _context.Projects
                 .AsNoTracking()
                 .Where(x => x.Manager.Id == user.Id)
-                .ToListAsync(cancellationToken);
+                .ProjectTo<ProjectDto>(_mapper.ConfigurationProvider);
+                
 
-            return  _mapper.Map<IEnumerable<ProjectDto>>(projects);
+            return await projects.ToListAsync(cancellationToken);
         }
     }
 }
