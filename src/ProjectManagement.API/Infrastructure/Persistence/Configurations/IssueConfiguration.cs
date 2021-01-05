@@ -12,7 +12,7 @@ namespace ProjectManagement.API.Infrastructure.Persistence.Configurations
             builder.HasOne(x => x.Project).WithMany().IsRequired();
             builder.Property(x => x.Name).IsRequired().HasMaxLength(255);
             builder.Property(x => x.Name).IsRequired().HasMaxLength(255);
-            builder.Property(x => x.Description).IsRequired().HasMaxLength(5000);
+            builder.Property(x => x.Description).IsRequired(false).HasMaxLength(5000);
         }
     }
 }

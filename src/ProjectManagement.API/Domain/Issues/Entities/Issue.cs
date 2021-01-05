@@ -38,10 +38,12 @@ namespace ProjectManagement.API.Domain.Issues.Entities
         {
             if (string.IsNullOrWhiteSpace(description))
             {
-                throw new PropertyValidationException(nameof(description), "Issue's description must not be empty!");
+                Description = null;
             }
-            
-            Description = description;
+            else
+            {
+                Description = description;
+            }
         }
     }
 }
