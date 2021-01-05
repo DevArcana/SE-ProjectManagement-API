@@ -56,14 +56,14 @@ namespace ProjectManagement.API.Domain.Projects.Services
 
             return project == null ? null : _mapper.Map<ProjectDto>(project);
         }
-        public async Task<List<ProjectDto>> GetProjects(ApplicationUser user, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ProjectDto>> GetProjects(ApplicationUser user, CancellationToken cancellationToken = default)
         {
             var projects = await _context.Projects
                 .AsNoTracking()
                 .Where(x => x.Manager.Id == user.Id)
                 .ToListAsync(cancellationToken);
 
-            return  _mapper.Map<List<ProjectDto>>(projects);
+            return  _mapper.Map<IEnumerable<ProjectDto>>(projects);
         }
     }
 }
