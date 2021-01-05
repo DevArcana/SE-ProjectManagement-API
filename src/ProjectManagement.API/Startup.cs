@@ -14,7 +14,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ProjectManagement.API.Application;
 using ProjectManagement.API.Common.Exceptions;
+using ProjectManagement.API.Domain;
 using ProjectManagement.API.Domain.Projects;
 using ProjectManagement.API.Domain.Users.Entities;
 using ProjectManagement.API.Infrastructure;
@@ -70,8 +72,9 @@ namespace ProjectManagement.API
                 });
             // End Identity
             
-            // Domain services
-            services.AddProjects(Configuration);
+            // Add domain and application services
+            services.AddDomain(Configuration);
+            services.AddApplication(Configuration);
 
             services.AddSwaggerGen(c =>
             {

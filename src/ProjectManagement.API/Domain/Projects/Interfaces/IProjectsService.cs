@@ -8,7 +8,7 @@ namespace ProjectManagement.API.Domain.Projects.Interfaces
 {
     public interface IProjectsService
     {
-        Task<ProjectDto> CreateProjectAsync(ApplicationUser manager, string name, CancellationToken cancellationToken = default);
-        Task<ProjectDto> GetProjectById(ApplicationUser user, long id, CancellationToken cancellationToken = default);
+        Task<Project> CreateProjectAsync(ApplicationUser manager, string name, CancellationToken cancellationToken = default);
+        Task<Project> GetProjectById(ApplicationUser user, long id, CancellationToken cancellationToken = default);
     }
 }
