@@ -11,6 +11,6 @@ namespace ProjectManagement.API.Domain.Projects.Interfaces
     {
         Task<ProjectDto> CreateProjectAsync(ApplicationUser manager, string name, CancellationToken cancellationToken = default);
         Task<ProjectDto> GetProjectById(ApplicationUser user, long id, CancellationToken cancellationToken = default);
-        Task<List<ProjectDto>> GetAllProjects(ApplicationUser user, CancellationToken cancellationToken = default);
+        Task<List<ProjectDto>> GetProjects(ApplicationUser user, CancellationToken cancellationToken = default);
     }
 }

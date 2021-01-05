@@ -56,7 +56,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
 
             return project == null ? null : _mapper.Map<ProjectDto>(project);
         }
-        public async Task<List<ProjectDto>> GetAllProjects(ApplicationUser user, CancellationToken cancellationToken = default)
+        public async Task<List<ProjectDto>> GetProjects(ApplicationUser user, CancellationToken cancellationToken = default)
         {
             var projects = await _context.Projects
                 .AsNoTracking()
