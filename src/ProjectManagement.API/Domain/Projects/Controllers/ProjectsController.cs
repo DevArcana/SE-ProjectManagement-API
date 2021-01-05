@@ -52,5 +52,13 @@ namespace ProjectManagement.API.Domain.Projects.Controllers
             }
             return Ok(project);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetListOfProjects()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var projects = await _projectsService.GetAllProjects(user);
+            
+            return Ok(projects);
+        }
     }
 }

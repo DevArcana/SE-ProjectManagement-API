@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -53,6 +55,15 @@ namespace ProjectManagement.API.Domain.Projects.Services
                 .FirstOrDefaultAsync(x => x.Id == id && x.Manager.Id == user.Id, cancellationToken);
 
             return project == null ? null : _mapper.Map<ProjectDto>(project);
+        }
+        public async Task<List<ProjectDto>> GetAllProjects(ApplicationUser user, CancellationToken cancellationToken = default)
+        {
+            var projects = await _context.Projects
+                .AsNoTracking()
+                .Where(x => x.Manager.Id == user.Id)
+                .ToListAsync(cancellationToken);
+
+            return  _mapper.Map<List<ProjectDto>>(projects);
         }
     }
 }
