@@ -41,6 +41,12 @@ namespace ProjectManagement.API.Application.AppServices
         public async Task<IEnumerable<IssueDto>> GetIssuesForProjectAsync(ApplicationUser user, long projectId, CancellationToken cancellationToken = default)
         {
             var issues = await _issuesService.GetIssuesForProjectAsync(user, projectId, cancellationToken);
+
+            if (issues == null)
+            {
+                return null;
+            }
+            
             return await issues.ProjectTo<IssueDto>(_mapper.ConfigurationProvider).ToListAsync(cancellationToken);
         }
     }

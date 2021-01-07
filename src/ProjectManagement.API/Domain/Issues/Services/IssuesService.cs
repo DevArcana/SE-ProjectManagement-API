@@ -74,6 +74,7 @@ namespace ProjectManagement.API.Domain.Issues.Services
             }
 
             return _context.Issues
+                .AsNoTracking()
                 .Where(x => x.Project.Id == projectId);
         }
     }
