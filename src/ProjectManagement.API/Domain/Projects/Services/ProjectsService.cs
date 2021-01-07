@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -45,7 +43,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
             return project;
         }
 
-        public async Task<Project> GetProjectById(ApplicationUser user, long id, CancellationToken cancellationToken = default)
+        public async Task<Project> GetProjectByIdAsync(ApplicationUser user, long id, CancellationToken cancellationToken = default)
         {
             // TODO: Add access lists instead of relying on being a manager
             var project = await _context.Projects
@@ -54,15 +52,11 @@ namespace ProjectManagement.API.Domain.Projects.Services
 
             return project;
         }
-        public async Task<IEnumerable<ProjectDto>> GetProjects(ApplicationUser user, CancellationToken cancellationToken = default)
+        public IQueryable<Project> GetProjects(ApplicationUser user)
         {
-            var projects = _context.Projects
+            return _context.Projects
                 .AsNoTracking()
-                .Where(x => x.Manager.Id == user.Id)
-                .ProjectTo<ProjectDto>(_mapper.ConfigurationProvider);
-                
-
-            return await projects.ToListAsync(cancellationToken);
+                .Where(x => x.Manager.Id == user.Id);
         }
     }
 }

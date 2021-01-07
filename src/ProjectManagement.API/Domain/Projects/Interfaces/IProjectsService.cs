@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ProjectManagement.API.Domain.Projects.Entities;
@@ -9,7 +9,7 @@ namespace ProjectManagement.API.Domain.Projects.Interfaces
     public interface IProjectsService
     {
         Task<Project> CreateProjectAsync(ApplicationUser manager, string name, CancellationToken cancellationToken = default);
-        Task<Project> GetProjectById(ApplicationUser user, long id, CancellationToken cancellationToken = default);
-        Task<IEnumerable<ProjectDto>> GetProjects(ApplicationUser user, CancellationToken cancellationToken = default);
+        Task<Project> GetProjectByIdAsync(ApplicationUser user, long id, CancellationToken cancellationToken = default);
+        IQueryable<Project> GetProjects(ApplicationUser user);
     }
 }

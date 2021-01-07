@@ -29,7 +29,7 @@ namespace ProjectManagement.API.Domain.Issues.Services
 
         public async Task<Issue> CreateIssueAsync(ApplicationUser user, long projectId, string name, string description, CancellationToken cancellationToken = default)
         {
-            var project = await _projectsService.GetProjectById(user, projectId, cancellationToken);
+            var project = await _projectsService.GetProjectByIdAsync(user, projectId, cancellationToken);
 
             if (project == null)
             {
@@ -58,7 +58,7 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 return null;
             }
 
-            var project = await _projectsService.GetProjectById(user, issue.Project.Id, cancellationToken);
+            var project = await _projectsService.GetProjectByIdAsync(user, issue.Project.Id, cancellationToken);
 
             // Verify the user has access to the project in the first place
             return project == null ? null : issue;
@@ -66,7 +66,7 @@ namespace ProjectManagement.API.Domain.Issues.Services
 
         public async Task<IQueryable<Issue>> GetIssuesForProjectAsync(ApplicationUser user, long projectId, CancellationToken cancellationToken = default)
         {
-            var project = await _projectsService.GetProjectById(user, projectId, cancellationToken);
+            var project = await _projectsService.GetProjectByIdAsync(user, projectId, cancellationToken);
 
             if (project == null)
             {

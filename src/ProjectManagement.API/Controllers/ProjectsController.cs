@@ -36,7 +36,7 @@ namespace ProjectManagement.API.Controllers
         public async Task<IActionResult> GetProjectById(long id)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var project = await _projectsAppService.GetProjectById(user, id);
+            var project = await _projectsAppService.GetProjectByIdAsync(user, id);
 
             if (project == null)
             {
@@ -57,7 +57,7 @@ namespace ProjectManagement.API.Controllers
         public async Task<IActionResult> GetProjects()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var projects = await _projectsService.GetProjects(user);
+            var projects = await _projectsAppService.GetProjectsAsync(user);
             
             return Ok(projects);
         }

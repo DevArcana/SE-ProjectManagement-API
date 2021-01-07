@@ -1,6 +1,9 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.API.Application.Interfaces;
 using ProjectManagement.API.Application.Models;
@@ -28,10 +31,18 @@ namespace ProjectManagement.API.Application.AppServices
             return project == null ? null : _mapper.Map<ProjectDto>(project);
         }
 
-        public async Task<ProjectDto> GetProjectById(ApplicationUser user, long id, CancellationToken cancellationToken = default)
+        public async Task<ProjectDto> GetProjectByIdAsync(ApplicationUser user, long id, CancellationToken cancellationToken = default)
         {
-            var project = await _projectsService.GetProjectById(user, id, cancellationToken);
+            var project = await _projectsService.GetProjectByIdAsync(user, id, cancellationToken);
             return project == null ? null : _mapper.Map<ProjectDto>(project);
+        }
+
+        public async Task<IEnumerable<ProjectDto>> GetProjectsAsync(ApplicationUser user, CancellationToken cancellationToken = default)
+        {
+            return await _projectsService
+                .GetProjects(user)
+                .ProjectTo<ProjectDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
         }
     }
 }
