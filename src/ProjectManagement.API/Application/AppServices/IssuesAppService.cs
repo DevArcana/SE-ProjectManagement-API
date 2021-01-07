@@ -32,9 +32,9 @@ namespace ProjectManagement.API.Application.AppServices
             return issue == null ? null : _mapper.Map<IssueDto>(issue);
         }
 
-        public async Task<IssueDto> GetIssueByIdAsync(ApplicationUser user, long issueId, CancellationToken cancellationToken = default)
+        public async Task<IssueDto> GetIssueByIdAsync(ApplicationUser user, long projectId, long issueId, CancellationToken cancellationToken = default)
         {
-            var issue = await _issuesService.GetIssueByIdAsync(user, issueId, cancellationToken);
+            var issue = await _issuesService.GetIssueByIdAsync(user, projectId, issueId, cancellationToken);
             return issue == null ? null : _mapper.Map<IssueDto>(issue);
         }
 

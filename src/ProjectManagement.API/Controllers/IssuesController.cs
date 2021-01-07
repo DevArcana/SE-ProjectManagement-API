@@ -50,7 +50,8 @@ namespace ProjectManagement.API.Controllers
         public async Task<IActionResult> GetIssueById(long projectId, long issueId)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var issue = await _issuesAppService.GetIssueByIdAsync(user, issueId);
+
+            var issue = await _issuesAppService.GetIssueByIdAsync(user, projectId, issueId);
 
             if (issue == null)
             {

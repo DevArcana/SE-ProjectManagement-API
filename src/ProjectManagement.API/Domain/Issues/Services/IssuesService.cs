@@ -36,6 +36,8 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 return null;
             }
 
+            _context.Attach(project);
+            
             var issue = new Issue(project, name, description);
             
             _context.Issues.Add(issue);
@@ -47,7 +49,7 @@ namespace ProjectManagement.API.Domain.Issues.Services
             return issue;
         }
 
-        public async Task<Issue> GetIssueByIdAsync(ApplicationUser user, long issueId, CancellationToken cancellationToken = default)
+        public async Task<Issue> GetIssueByIdAsync(ApplicationUser user, long projectId, long issueId, CancellationToken cancellationToken = default)
         {
             var issue = await _context.Issues
                 .Include(x => x.Project)
@@ -58,7 +60,13 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 return null;
             }
 
-            var project = await _projectsService.GetProjectByIdAsync(user, issue.Project.Id, cancellationToken);
+            if (projectId != issue.Project.Id)
+            {
+                // No bueno if user wants to bypass the access check
+                return null;
+            }
+
+            var project = await _projectsService.GetProjectByIdAsync(user, projectId, cancellationToken);
 
             // Verify the user has access to the project in the first place
             return project == null ? null : issue;
