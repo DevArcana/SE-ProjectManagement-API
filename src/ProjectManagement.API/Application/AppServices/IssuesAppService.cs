@@ -53,7 +53,7 @@ namespace ProjectManagement.API.Application.AppServices
         public async Task<IssueDto> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name, string description,
             CancellationToken cancellationToken = default)
         {
-            var issue = _issuesService.UpdateIssueAsync(user, projectId, issueId, name, description, cancellationToken);
+            var issue = await _issuesService.UpdateIssueAsync(user, projectId, issueId, name, description, cancellationToken);
             return issue == null ? null : _mapper.Map<IssueDto>(issue);
         }
     }

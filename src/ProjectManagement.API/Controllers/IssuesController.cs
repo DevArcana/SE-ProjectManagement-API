@@ -107,7 +107,7 @@ namespace ProjectManagement.API.Controllers
                     Status = StatusCodes.Status404NotFound,
                     Type = $"https://httpstatuses.com/404",
                     Title = "Not found",
-                    Detail = $"Issue {dto.Id} does not exist or you do not have access to it."
+                    Detail = $"Issue {dto.Id} does not exist in Project {projectId} or you do not have access to it."
                 };
 
                 return NotFound(problem);
