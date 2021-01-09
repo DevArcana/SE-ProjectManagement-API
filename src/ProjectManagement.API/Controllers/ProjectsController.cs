@@ -61,5 +61,27 @@ namespace ProjectManagement.API.Controllers
             
             return Ok(projects);
         }
+
+        [HttpPut("{projectId}")]
+        public async Task<IActionResult> EditProject([FromBody] ProjectDto dto)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var project = await _projectsAppService.UpdateProjectAsync(user, dto.Id, dto.Name);
+
+            if (project == null)
+            {
+                var problem = new ProblemDetails
+                {
+                    Instance = HttpContext.Request.Path,
+                    Status = StatusCodes.Status404NotFound,
+                    Type = $"https://httpstatuses.com/404",
+                    Title = "Not found",
+                    Detail = $"Project {dto.Id} does not exist or you do not have access to it."
+                };
+
+                return NotFound(problem);
+            }
+            return Ok(project);
+        }
     }
 }
