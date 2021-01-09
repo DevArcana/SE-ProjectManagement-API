@@ -61,7 +61,22 @@ namespace ProjectManagement.API.Domain.Projects.Services
 
         public async Task<Project> DeleteProjectAsync(ApplicationUser user, long projectId, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var project = await _context.Projects.AsNoTracking().FirstOrDefaultAsync(x => x.Id == projectId, cancellationToken: cancellationToken);
+
+            if (project == null)
+            {
+                return null;
+            }
+
+            if (project.Manager.Id != user.Id)
+            {
+                return null;
+            }
+
+            _context.Entry(project).State = EntityState.Deleted;
+            await _context.SaveChangesAsync(cancellationToken);
+            
+            return project;
         }
     }
 }
