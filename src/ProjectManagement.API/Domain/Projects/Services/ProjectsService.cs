@@ -58,5 +58,10 @@ namespace ProjectManagement.API.Domain.Projects.Services
                 .AsNoTracking()
                 .Where(x => x.Manager.Id == user.Id);
         }
+
+        public async Task<Project> DeleteProjectAsync(ApplicationUser user, long projectId, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
