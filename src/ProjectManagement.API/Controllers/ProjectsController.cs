@@ -62,7 +62,7 @@ namespace ProjectManagement.API.Controllers
             return Ok(projects);
         }
 
-        [HttpPut("{projectId}")]
+        [HttpPut]
         public async Task<IActionResult> EditProject([FromBody] ProjectDto dto)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
