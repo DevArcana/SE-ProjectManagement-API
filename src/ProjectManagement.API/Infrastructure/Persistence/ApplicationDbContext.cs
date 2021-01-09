@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ProjectManagement.API.Domain.Issues.Entities;
 using ProjectManagement.API.Domain.Projects.Entities;
 using ProjectManagement.API.Domain.Users.Entities;
 
@@ -21,5 +22,6 @@ namespace ProjectManagement.API.Infrastructure.Persistence
         }
         
         public DbSet<Project> Projects { get; set; }
+        public DbSet<Issue> Issues { get; set; }
     }
 }

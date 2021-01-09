@@ -1,16 +1,13 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.API.Common.Exceptions;
 using ProjectManagement.API.Domain.Projects.Entities;
 using ProjectManagement.API.Domain.Projects.Interfaces;
-using ProjectManagement.API.Domain.Projects.Models;
 using ProjectManagement.API.Domain.Users.Entities;
 using ProjectManagement.API.Infrastructure.Persistence;
 
@@ -20,16 +17,14 @@ namespace ProjectManagement.API.Domain.Projects.Services
     {
         private readonly ILogger<ProjectsService> _logger;
         private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
 
-        public ProjectsService(ILogger<ProjectsService> logger, ApplicationDbContext context, IMapper mapper)
+        public ProjectsService(ILogger<ProjectsService> logger, ApplicationDbContext context)
         {
             _logger = logger;
             _context = context;
-            _mapper = mapper;
         }
 
-        public async Task<ProjectDto> CreateProjectAsync(ApplicationUser manager, string name, CancellationToken cancellationToken = default)
+        public async Task<Project> CreateProjectAsync(ApplicationUser manager, string name, CancellationToken cancellationToken = default)
         {
             var project = await _context.Projects.AsNoTracking().FirstOrDefaultAsync(x => x.Name == name, cancellationToken: cancellationToken);
 
@@ -45,27 +40,23 @@ namespace ProjectManagement.API.Domain.Projects.Services
 
             _logger.LogInformation("{user} created project {projectName}", project.Manager.UserName, project.Name);
             
-            return _mapper.Map<ProjectDto>(project);
+            return project;
         }
 
-        public async Task<ProjectDto> GetProjectById(ApplicationUser user, long id, CancellationToken cancellationToken = default)
+        public async Task<Project> GetProjectByIdAsync(ApplicationUser user, long id, CancellationToken cancellationToken = default)
         {
             // TODO: Add access lists instead of relying on being a manager
             var project = await _context.Projects
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id && x.Manager.Id == user.Id, cancellationToken);
 
-            return project == null ? null : _mapper.Map<ProjectDto>(project);
+            return project;
         }
-        public async Task<IEnumerable<ProjectDto>> GetProjects(ApplicationUser user, CancellationToken cancellationToken = default)
+        public IQueryable<Project> GetProjects(ApplicationUser user)
         {
-            var projects = _context.Projects
+            return _context.Projects
                 .AsNoTracking()
-                .Where(x => x.Manager.Id == user.Id)
-                .ProjectTo<ProjectDto>(_mapper.ConfigurationProvider);
-                
-
-            return await projects.ToListAsync(cancellationToken);
+                .Where(x => x.Manager.Id == user.Id);
         }
     }
 }

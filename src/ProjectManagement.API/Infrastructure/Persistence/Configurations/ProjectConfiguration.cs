@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProjectManagement.API.Domain.Issues.Entities;
 using ProjectManagement.API.Domain.Projects.Entities;
 
 namespace ProjectManagement.API.Infrastructure.Persistence.Configurations
@@ -17,6 +18,8 @@ namespace ProjectManagement.API.Infrastructure.Persistence.Configurations
                 .HasMaxLength(32);
 
             builder.HasIndex(x => x.Name).IsUnique();
+
+            builder.HasMany<Issue>().WithOne(x => x.Project).IsRequired();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using ProjectManagement.API.Domain.Projects.Entities;
 using ProjectManagement.API.Infrastructure.AutoMapper;
 
-namespace ProjectManagement.API.Domain.Projects.Models
+namespace ProjectManagement.API.Application.Models
 {
     public class ProjectDto : IMapFrom<Project>
     {
