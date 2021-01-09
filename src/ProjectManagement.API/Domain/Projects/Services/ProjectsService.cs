@@ -62,7 +62,25 @@ namespace ProjectManagement.API.Domain.Projects.Services
         public async Task<Project> UpdateProjectAsync(ApplicationUser user, long projectId, string name,
             CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var project = await _context.Projects
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == projectId && x.Manager.Id == user.Id, cancellationToken);
+
+            if (project == null)
+            {
+                return null;
+            }
+
+            _context.Attach(project);
+            
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                project.Rename(name);
+            }
+            
+            await _context.SaveChangesAsync(cancellationToken);
+            
+            return project;
         }
     }
 }

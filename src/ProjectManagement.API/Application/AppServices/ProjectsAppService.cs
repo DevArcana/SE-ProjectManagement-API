@@ -48,7 +48,8 @@ namespace ProjectManagement.API.Application.AppServices
         public async Task<ProjectDto> UpdateProjectAsync(ApplicationUser user, long projectId, string name,
             CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var project = await _projectsService.UpdateProjectAsync(user, projectId, name, cancellationToken);
+            return project == null ? null : _mapper.Map<ProjectDto>(project);
         }
     }
 }
