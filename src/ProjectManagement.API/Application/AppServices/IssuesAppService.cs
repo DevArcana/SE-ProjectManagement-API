@@ -57,10 +57,11 @@ namespace ProjectManagement.API.Application.AppServices
             return issue == null ? null : _mapper.Map<IssueDto>(issue);
         }
 
-        public Task<IssueDto> DeleteIssueAsync(ApplicationUser user, long projectId, long issueId,
+        public async Task<IssueDto> DeleteIssueAsync(ApplicationUser user, long projectId, long issueId,
             CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var issue = await _issuesService.DeleteIssueAsync(user, projectId, issueId, cancellationToken);
+            return issue == null ? null : _mapper.Map<IssueDto>(issue);
         }
     }
 }
