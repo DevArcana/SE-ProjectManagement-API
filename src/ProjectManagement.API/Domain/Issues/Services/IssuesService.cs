@@ -89,7 +89,12 @@ namespace ProjectManagement.API.Domain.Issues.Services
         public Task<Issue> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name, string description,
             CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var issue = _context.Issues
+                .Include(x => x.Project)
+                .FirstOrDefaultAsync(x => x.Id == issueId && x.Project.Id == projectId, cancellationToken);
+            issue.Result.Rename(name);
+            issue.Result.ChangeDescription(description);
+            return issue;
         }
     }
 }
