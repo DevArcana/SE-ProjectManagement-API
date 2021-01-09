@@ -115,7 +115,7 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 return null;
             }
 
-            if (!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrWhitespace(name))
             {
                 issue.Rename(name);
             }
