@@ -50,10 +50,11 @@ namespace ProjectManagement.API.Application.AppServices
             return await issues.ProjectTo<IssueDto>(_mapper.ConfigurationProvider).ToListAsync(cancellationToken);
         }
 
-        public Task<IssueDto> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name, string description,
+        public async Task<IssueDto> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name, string description,
             CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var issue = _issuesService.UpdateIssueAsync(user, projectId, issueId, name, description, cancellationToken);
+            return issue == null ? null : _mapper.Map<IssueDto>(issue);
         }
     }
 }
