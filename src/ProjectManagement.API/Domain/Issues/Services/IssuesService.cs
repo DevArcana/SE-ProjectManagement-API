@@ -115,15 +115,11 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 return null;
             }
 
-            if (!string.IsNullOrWhitespace(name))
+            if (!string.IsNullOrWhiteSpace(name))
             {
                 issue.Rename(name);
             }
-            if (!string.IsNullOrEmpty(description))
-            {
-                issue.ChangeDescription(description);
-            }
-            
+
             await _context.SaveChangesAsync(cancellationToken);
             
             return issue;
