@@ -116,5 +116,28 @@ namespace ProjectManagement.API.Controllers
             
             return Ok(issue);
         }
+
+        [HttpDelete("{issueId}")]
+        public async Task<IActionResult> DeleteIssue(long projectId, long issueId)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var issue = await _issuesAppService.DeleteIssueAsync(user, projectId, issueId);
+
+            if (issue == null)
+            {
+                var problem = new ProblemDetails
+                {
+                    Instance = HttpContext.Request.Path,
+                    Status = StatusCodes.Status404NotFound,
+                    Type = $"https://httpstatuses.com/404",
+                    Title = "Not found",
+                    Detail = $"Issue {issueId} does not exist in Project {projectId} or you do not have access to it."
+                };
+
+                return NotFound(problem);
+            }
+            
+            return Ok(issue);
+        }
     }
 }

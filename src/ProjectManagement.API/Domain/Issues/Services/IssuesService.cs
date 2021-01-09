@@ -124,5 +124,11 @@ namespace ProjectManagement.API.Domain.Issues.Services
             
             return issue;
         }
+
+        public Task<Issue> DeleteIssueAsync(ApplicationUser user, long projectId, long issueId,
+            CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

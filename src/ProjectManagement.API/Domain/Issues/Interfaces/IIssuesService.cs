@@ -15,5 +15,6 @@ namespace ProjectManagement.API.Domain.Issues.Interfaces
 
         Task<Issue> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name,
             string description, CancellationToken cancellationToken = default);
+        Task<Issue> DeleteIssueAsync(ApplicationUser user, long projectId, long issueId, CancellationToken cancellationToken = default);
     }
 }
