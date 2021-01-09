@@ -12,5 +12,8 @@ namespace ProjectManagement.API.Domain.Issues.Interfaces
         Task<Issue> GetIssueByIdAsync(ApplicationUser user, long projectId, long issueId,
             CancellationToken cancellationToken = default);
         Task<IQueryable<Issue>> GetIssuesForProjectAsync(ApplicationUser user, long projectId, CancellationToken cancellationToken = default);
+
+        Task<Issue> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name,
+            string description, CancellationToken cancellationToken = default);
     }
 }

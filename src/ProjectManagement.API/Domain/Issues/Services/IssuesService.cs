@@ -85,5 +85,11 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 .AsNoTracking()
                 .Where(x => x.Project.Id == projectId);
         }
+
+        public Task<Issue> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name, string description,
+            CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
