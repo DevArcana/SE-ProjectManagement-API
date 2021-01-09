@@ -119,7 +119,7 @@ namespace ProjectManagement.API.Domain.Issues.Services
             {
                 issue.Rename(name);
             }
-
+            issue.ChangeDescription(description);
             await _context.SaveChangesAsync(cancellationToken);
             
             return issue;
