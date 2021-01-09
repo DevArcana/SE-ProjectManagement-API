@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ProjectManagement.API.Common.Exceptions;
 using ProjectManagement.API.Domain.Issues.Entities;
 using ProjectManagement.API.Domain.Issues.Interfaces;
 using ProjectManagement.API.Domain.Projects.Interfaces;
@@ -114,16 +115,17 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 return null;
             }
 
-            if (name != "" || name == null)
+            if (!string.IsNullOrEmpty(name))
             {
                 issue.Rename(name);
             }
-
-            if (description != "" || description == null)
+            if (!string.IsNullOrEmpty(description))
             {
                 issue.ChangeDescription(description);
             }
+            
             await _context.SaveChangesAsync(cancellationToken);
+            
             return issue;
         }
     }
