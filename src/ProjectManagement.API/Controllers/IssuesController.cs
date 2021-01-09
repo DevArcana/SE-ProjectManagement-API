@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -91,6 +92,29 @@ namespace ProjectManagement.API.Controllers
             }
             
             return Ok(issues);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateIssue(long projectId,  [FromBody] IssueDto dto)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var issue = await _issuesAppService.UpdateIssueAsync(user, projectId, dto.Id, dto.Name, dto.Description);
+
+            if (issue == null)
+            {
+                var problem = new ProblemDetails
+                {
+                    Instance = HttpContext.Request.Path,
+                    Status = StatusCodes.Status404NotFound,
+                    Type = $"https://httpstatuses.com/404",
+                    Title = "Not found",
+                    Detail = $"Issue {dto.Id} does not exist in Project {projectId} or you do not have access to it."
+                };
+
+                return NotFound(problem);
+            }
+            
+            return Ok(issue);
         }
     }
 }

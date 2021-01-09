@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ProjectManagement.API.Common.Exceptions;
 using ProjectManagement.API.Domain.Issues.Entities;
 using ProjectManagement.API.Domain.Issues.Interfaces;
 using ProjectManagement.API.Domain.Projects.Interfaces;
@@ -84,6 +85,44 @@ namespace ProjectManagement.API.Domain.Issues.Services
             return _context.Issues
                 .AsNoTracking()
                 .Where(x => x.Project.Id == projectId);
+        }
+
+        public async Task<Issue> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name, string description,
+            CancellationToken cancellationToken = default)
+        {
+            var project = await _projectsService.GetProjectByIdAsync(user, projectId, cancellationToken);
+
+            if (project == null)
+            {
+                return null;
+            }
+
+            _context.Attach(project);
+            
+            var issue = await _context.Issues
+                .Include(x => x.Project)
+                .FirstOrDefaultAsync(x => x.Id == issueId, cancellationToken);
+           
+            if (issue == null)
+            {
+                return null;
+            }
+            
+            _context.Issues.Attach(issue);
+            
+            if (projectId != issue.Project.Id)
+            {
+                return null;
+            }
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                issue.Rename(name);
+            }
+            issue.ChangeDescription(description);
+            await _context.SaveChangesAsync(cancellationToken);
+            
+            return issue;
         }
     }
 }
