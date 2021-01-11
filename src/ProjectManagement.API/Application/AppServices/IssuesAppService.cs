@@ -56,5 +56,12 @@ namespace ProjectManagement.API.Application.AppServices
             var issue = await _issuesService.UpdateIssueAsync(user, projectId, issueId, name, description, cancellationToken);
             return issue == null ? null : _mapper.Map<IssueDto>(issue);
         }
+
+        public async Task<IssueDto> DeleteIssueAsync(ApplicationUser user, long projectId, long issueId,
+            CancellationToken cancellationToken = default)
+        {
+            var issue = await _issuesService.DeleteIssueAsync(user, projectId, issueId, cancellationToken);
+            return issue == null ? null : _mapper.Map<IssueDto>(issue);
+        }
     }
 }

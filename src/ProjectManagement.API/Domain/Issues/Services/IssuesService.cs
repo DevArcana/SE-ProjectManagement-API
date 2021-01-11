@@ -124,5 +124,38 @@ namespace ProjectManagement.API.Domain.Issues.Services
             
             return issue;
         }
+
+        public async Task<Issue> DeleteIssueAsync(ApplicationUser user, long projectId, long issueId,
+            CancellationToken cancellationToken = default)
+        {
+            var project = await _projectsService.GetProjectByIdAsync(user, projectId, cancellationToken);
+
+            if (project == null)
+            {
+                return null;
+            }
+
+            _context.Attach(project);
+            var issue = await _context.Issues
+                .Include(x => x.Project)
+                .FirstOrDefaultAsync(x => x.Id == issueId, cancellationToken);
+           
+            if (issue == null)
+            {
+                return null;
+            }
+            
+            _context.Issues.Attach(issue);
+            
+            if (projectId != issue.Project.Id)
+            {
+                return null;
+            }
+
+            _context.Entry(issue).State = EntityState.Deleted;
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return issue;
+        }
     }
 }
