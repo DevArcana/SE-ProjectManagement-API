@@ -44,5 +44,12 @@ namespace ProjectManagement.API.Application.AppServices
                 .ProjectTo<ProjectDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
         }
+
+        public async Task<ProjectDto> UpdateProjectAsync(ApplicationUser user, long projectId, string name,
+            CancellationToken cancellationToken = default)
+        {
+            var project = await _projectsService.UpdateProjectAsync(user, projectId, name, cancellationToken);
+            return project == null ? null : _mapper.Map<ProjectDto>(project);
+        }
     }
 }
