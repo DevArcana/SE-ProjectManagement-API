@@ -45,6 +45,13 @@ namespace ProjectManagement.API.Application.AppServices
                 .ToListAsync(cancellationToken);
         }
 
+
+        public async Task<ProjectDto> DeleteProjectAsync(ApplicationUser user, long projectId, CancellationToken cancellationToken = default)
+        {
+            var project = await _projectsService.DeleteProjectAsync(user, projectId, cancellationToken);
+            return project == null ? null : _mapper.Map<ProjectDto>(project);
+        }
+        
         public async Task<ProjectDto> UpdateProjectAsync(ApplicationUser user, long projectId, string name,
             CancellationToken cancellationToken = default)
         {

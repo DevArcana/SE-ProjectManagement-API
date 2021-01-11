@@ -71,13 +71,28 @@ namespace ProjectManagement.API.Domain.Projects.Services
                 return null;
             }
 
-            _context.Attach(project);
-            
+            _context.Attach(project);   
             if (!string.IsNullOrWhiteSpace(name))
             {
                 project.Rename(name);
             }
+            await _context.SaveChangesAsync(cancellationToken);
             
+            return project;
+        }
+        public async Task<Project> DeleteProjectAsync(ApplicationUser user, long projectId, CancellationToken cancellationToken = default)
+        {
+            var project = await _context.Projects
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == projectId && x.Manager.Id == user.Id, cancellationToken);
+
+            if (project == null)
+            {
+                return null;
+            }
+
+            _context.Attach(project);
+            _context.Entry(project).State = EntityState.Deleted;
             await _context.SaveChangesAsync(cancellationToken);
             
             return project;

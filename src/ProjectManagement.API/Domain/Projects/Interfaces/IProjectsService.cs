@@ -11,6 +11,7 @@ namespace ProjectManagement.API.Domain.Projects.Interfaces
         Task<Project> CreateProjectAsync(ApplicationUser manager, string name, CancellationToken cancellationToken = default);
         Task<Project> GetProjectByIdAsync(ApplicationUser user, long id, CancellationToken cancellationToken = default);
         IQueryable<Project> GetProjects(ApplicationUser user);
+        Task<Project> DeleteProjectAsync(ApplicationUser user, long projectId, CancellationToken cancellationToken = default);
         Task<Project> UpdateProjectAsync(ApplicationUser user, long projectId, string name, CancellationToken cancellationToken = default);
     }
 }
