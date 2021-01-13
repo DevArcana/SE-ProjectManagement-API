@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.Configuration;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,18 +15,18 @@ using ProjectManagement.API.Infrastructure.Persistence;
 
 namespace ProjectManagement.API.Domain.Users.Controllers
 {
+    [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
 
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<ProjectsService> _logger;
         private readonly IMapper _mapper;
         
-        public UsersController(ApplicationDbContext context, ILogger<ProjectsService> logger, IMapper mapper)
+        public UsersController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
-            _logger = logger;
             _mapper = mapper;
         }
 
