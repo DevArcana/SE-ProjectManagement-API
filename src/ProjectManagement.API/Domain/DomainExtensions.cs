@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ProjectManagement.API.Domain.Issues;
 using ProjectManagement.API.Domain.Projects;
+using ProjectManagement.API.Domain.Users;
 
 namespace ProjectManagement.API.Domain
 {
@@ -11,6 +12,7 @@ namespace ProjectManagement.API.Domain
         {
             services.AddProjects(configuration);
             services.AddIssues(configuration);
+            services.AddUsers(configuration);
             return services;
         }
     }
