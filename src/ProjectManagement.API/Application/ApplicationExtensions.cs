@@ -11,6 +11,7 @@ namespace ProjectManagement.API.Application
         {
             services.AddScoped<IProjectsAppService, ProjectsAppService>();
             services.AddScoped<IIssuesAppService, IssuesAppService>();
+            services.AddScoped<IUsersAppService, UsersAppService>();
             return services;
         }
     }
