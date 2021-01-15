@@ -59,18 +59,21 @@ namespace ProjectManagement.API.Application.AppServices
             return project == null ? null : _mapper.Map<ProjectDto>(project);
         }
 
-        public Task<IEnumerable<CollaboratorDto>> GetCollaborators(ApplicationUser user, long projectId, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<CollaboratorDto>> GetCollaboratorsAsync(ApplicationUser user, long projectId, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            return await _projectsService
+                .GetCollaborators(user, projectId)
+                .ProjectTo<CollaboratorDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
         }
 
-        public Task<CollaboratorDto> AddCollaborator(ApplicationUser user, long projectId, string userName,
+        public Task<CollaboratorDto> AddCollaboratorAsync(ApplicationUser user, long projectId, string userName,
             CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<CollaboratorDto> DeleteCollaborator(ApplicationUser user, long projectId, string userName,
+        public Task<CollaboratorDto> DeleteCollaboratorAsync(ApplicationUser user, long projectId, string userName,
             CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();

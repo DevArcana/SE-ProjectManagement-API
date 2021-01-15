@@ -105,10 +105,12 @@ namespace ProjectManagement.API.Controllers
             return Ok(project);
         }
 
-        [HttpGet("{id}/collaborators")]
-        public async Task<IActionResult> GetCollaborators()
+        [HttpGet("{projectId}/collaborators")]
+        public async Task<IActionResult> GetCollaborators(long projectId)
         {
-            return Ok();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var projects = await _projectsAppService.GetCollaboratorsAsync(user, projectId);
+            return Ok(projects);
         }
 
         [HttpPost("{id}/collaborators")]

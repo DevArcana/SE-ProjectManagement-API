@@ -14,11 +14,11 @@ namespace ProjectManagement.API.Application.Interfaces
         Task<ProjectDto> DeleteProjectAsync(ApplicationUser user, long projectId,
             CancellationToken cancellationToken = default);
         Task<ProjectDto> UpdateProjectAsync(ApplicationUser user, long projectId, string name, CancellationToken cancellationToken = default);
-        Task<IEnumerable<CollaboratorDto>> GetCollaborators(ApplicationUser user, long projectId,
+        Task<IEnumerable<CollaboratorDto>> GetCollaboratorsAsync(ApplicationUser user, long projectId,
             CancellationToken cancellationToken = default);
-        Task<CollaboratorDto> AddCollaborator(ApplicationUser user, long projectId, string userName,
+        Task<CollaboratorDto> AddCollaboratorAsync(ApplicationUser user, long projectId, string userName,
             CancellationToken cancellationToken = default);
-        Task<CollaboratorDto> DeleteCollaborator(ApplicationUser user, long projectId, string userName,
+        Task<CollaboratorDto> DeleteCollaboratorAsync(ApplicationUser user, long projectId, string userName,
             CancellationToken cancellationToken = default);
 
     }
