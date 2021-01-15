@@ -112,6 +112,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
             {
                 return null;
             }
+            
             var collabUser = await _context.Users.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.UserName == name, cancellationToken);
             if (collabUser == null)
@@ -119,8 +120,9 @@ namespace ProjectManagement.API.Domain.Projects.Services
                 return null;
             }
             collaborator = new UserProjectAccess(collabUser, project);
-
+            _context.Entry(collaborator.User).State = EntityState.Unchanged;
             _context.Add(collaborator);
+       
             await _context.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation($"{name} added as collaborator to  project {project.Name}", project.Manager.UserName, project.Name);

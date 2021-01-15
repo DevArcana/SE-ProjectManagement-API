@@ -17,11 +17,11 @@ namespace ProjectManagement.API.Domain.Projects.Entities
 
         public UserProjectAccess(ApplicationUser user, Project project)
         {
-            if (user.Id == project.Manager.Id)
-            {
-                throw new PropertyValidationException(nameof(user),
-                    "This user is the manager of this project, can't grant access.");
-            }
+            //if (user.Id == project.Manager.Id)
+            //{
+              //  throw new PropertyValidationException(nameof(user),
+                //    "This user is the manager of this project, can't grant access.");
+            //}
 
             User = user;
             UserId = user.Id;
@@ -29,5 +29,6 @@ namespace ProjectManagement.API.Domain.Projects.Entities
             Project = project;
             ProjectId = project.Id;
         }
+        
     }
 }
