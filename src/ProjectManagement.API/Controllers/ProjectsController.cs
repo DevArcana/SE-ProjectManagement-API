@@ -53,6 +53,7 @@ namespace ProjectManagement.API.Controllers
             }
             return Ok(project);
         }
+        
         [HttpGet]
         public async Task<IActionResult> GetProjects()
         {
@@ -83,6 +84,7 @@ namespace ProjectManagement.API.Controllers
             }
             return Ok(project);
         }
+        
         [HttpPut]
         public async Task<IActionResult> EditProject([FromBody] ProjectDto dto)
         {
@@ -101,6 +103,24 @@ namespace ProjectManagement.API.Controllers
                 return NotFound(problem);
             }
             return Ok(project);
+        }
+
+        [HttpGet("{id}/collaborators")]
+        public async Task<IActionResult> GetCollaborators()
+        {
+            return Ok();
+        }
+
+        [HttpPost("{id}/collaborators")]
+        public async Task<IActionResult> AddCollaborator([FromBody] CollaboratorDto dto)
+        {
+            return Ok();
+        }
+
+        [HttpDelete("{id}/collaborators")]
+        public async Task<IActionResult> DeleteCollaborator(string name)
+        {
+            return Ok();
         }
     }
 }
