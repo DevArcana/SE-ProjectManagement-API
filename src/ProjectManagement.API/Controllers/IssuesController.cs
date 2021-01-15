@@ -46,6 +46,53 @@ namespace ProjectManagement.API.Controllers
             
             return CreatedAtAction(nameof(GetIssueById), new {ProjectId = projectId, IssueId = issue.Id}, issue);
         }
+
+        [HttpGet("{issueId}/assignable")]
+        public async Task<IActionResult> GetAssignableUsers(long projectId, long issueId)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            
+            var users = await _issuesAppService.GetAssignableUsers(user, projectId, issueId);
+
+            if (users == null)
+            {
+                var problem = new ProblemDetails
+                {
+                    Instance = HttpContext.Request.Path,
+                    Status = StatusCodes.Status404NotFound,
+                    Type = $"https://httpstatuses.com/404",
+                    Title = "Not found",
+                    Detail = $"Either the project or issue does not exist or you do not have access to it."
+                };
+
+                return NotFound(problem);
+            }
+
+            return Ok(users);
+        }
+
+        [HttpPost("{issueId}/assign")]
+        public async Task<IActionResult> AssignUserToIssue(long projectId, long issueId, [FromBody] string username)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var result = await _issuesAppService.AssignUserToIssue(user, projectId, issueId, username);
+
+            if (!result)
+            {
+                var problem = new ProblemDetails
+                {
+                    Instance = HttpContext.Request.Path,
+                    Status = StatusCodes.Status404NotFound,
+                    Type = $"https://httpstatuses.com/404",
+                    Title = "Not found",
+                    Detail = $"Either the project, issue or user does not exist or you do not have access to it or the user is invalid for this operation."
+                };
+
+                return NotFound(problem);
+            }
+            
+            return Ok();
+        }
         
         [HttpGet("{issueId}")]
         public async Task<IActionResult> GetIssueById(long projectId, long issueId)
