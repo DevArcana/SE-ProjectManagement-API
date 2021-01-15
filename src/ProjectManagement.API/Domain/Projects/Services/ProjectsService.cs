@@ -149,7 +149,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
         {
             var collaborator = await _context.UserProjectAccesses
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.UserId == name && x.ProjectId == projectId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.UserId == name && x.ProjectId == projectId && x.Project.Manager.Id == user.Id, cancellationToken);
 
             if (collaborator == null)
             {
