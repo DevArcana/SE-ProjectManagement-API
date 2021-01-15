@@ -97,5 +97,19 @@ namespace ProjectManagement.API.Domain.Projects.Services
             
             return project;
         }
+        public Task<UserProjectAccess> AddCollaborator(ApplicationUser user, long projectId, string name, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IQueryable<UserProjectAccess> GetCollaborators(ApplicationUser user, long projectId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<UserProjectAccess> DeleteCollaborator(ApplicationUser user, long projectId, string name)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
