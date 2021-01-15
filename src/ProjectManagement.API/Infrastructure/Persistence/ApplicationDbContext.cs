@@ -23,6 +23,6 @@ namespace ProjectManagement.API.Infrastructure.Persistence
         
         public DbSet<Project> Projects { get; set; }
         public DbSet<Issue> Issues { get; set; }
-        public DbSet<UserProjectAccess> UserProjectAccesses { get; set; }
+        public DbSet<UserProjectAccess> UserProjectAccess { get; set; }
     }
 }

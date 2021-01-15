@@ -99,7 +99,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
         }
         public async Task<UserProjectAccess> AddCollaboratorAsync(ApplicationUser user, long projectId, string name, CancellationToken cancellationToken = default)
         {
-            var collaborator = await  _context.UserProjectAccesses.AsNoTracking()
+            var collaborator = await  _context.UserProjectAccess.AsNoTracking()
                     .FirstOrDefaultAsync(x =>  x.UserId == name && x.ProjectId == projectId, cancellationToken);
             if (collaborator != null)
             {
@@ -131,7 +131,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
         public async Task<UserProjectAccess> GetCollaboratorByNameAsync(ApplicationUser user, long projectId,
             string name, CancellationToken cancellationToken = default)
         {
-            var collaborator = await _context.UserProjectAccesses
+            var collaborator = await _context.UserProjectAccess
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.UserId == name && x.ProjectId == projectId, cancellationToken);
 
@@ -140,14 +140,14 @@ namespace ProjectManagement.API.Domain.Projects.Services
 
         public IQueryable<UserProjectAccess> GetCollaborators(ApplicationUser user, long projectId)
         {
-            return _context.UserProjectAccesses
+            return _context.UserProjectAccess
                 .AsNoTracking()
                 .Where(x => x.UserId == user.UserName && x.ProjectId == projectId);
         }
 
         public async Task<UserProjectAccess> DeleteCollaboratorAsync(ApplicationUser user, long projectId, string name, CancellationToken cancellationToken)
         {
-            var collaborator = await _context.UserProjectAccesses
+            var collaborator = await _context.UserProjectAccess
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.UserId == name && x.ProjectId == projectId && x.Project.Manager.Id == user.Id, cancellationToken);
 
