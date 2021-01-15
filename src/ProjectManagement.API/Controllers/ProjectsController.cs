@@ -124,7 +124,23 @@ namespace ProjectManagement.API.Controllers
         [HttpGet("{projectId}/collaborators/{userName}")]
         public async Task<IActionResult> GetCollaboratorByName(long projectId, string userName)
         {
-            return Ok();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var collaborator = await _projectsAppService.GetCollaboratorByNameAsync(user, projectId, userName);
+
+            if (collaborator == null)
+            {
+                var problem = new ProblemDetails
+                {
+                    Instance = HttpContext.Request.Path,
+                    Status = StatusCodes.Status404NotFound,
+                    Type = $"https://httpstatuses.com/404",
+                    Title = "Not found",
+                    Detail = $"Collaborator {userName} does not collaborate in this project."
+                };
+
+                return NotFound(problem);
+            }
+            return Ok(collaborator);
         }
         
         [HttpDelete("{id}/collaborators")]
