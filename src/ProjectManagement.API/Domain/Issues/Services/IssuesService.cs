@@ -120,8 +120,15 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 issue.Rename(name);
             }
             issue.ChangeDescription(description);
-            issue.CloseOrReopenIssue(closed);
-            issue.SetStatus(status);
+            if (closed != null)
+            {
+                issue.CloseOrReopenIssue(closed);
+            }
+
+            if (status != null)
+            {
+                issue.SetStatus(status);
+            }
             await _context.SaveChangesAsync(cancellationToken);
             
             return issue;
