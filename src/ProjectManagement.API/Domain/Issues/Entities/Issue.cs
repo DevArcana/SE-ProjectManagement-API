@@ -11,6 +11,8 @@ namespace ProjectManagement.API.Domain.Issues.Entities
         
         public string Name { get; private set; }
         public string Description { get; private set; }
+        public bool Closed { get; private set; }
+        public Status Status { get; private set; }
 
         private Issue()
         {
@@ -22,6 +24,8 @@ namespace ProjectManagement.API.Domain.Issues.Entities
             Project = project;
             Rename(name);
             ChangeDescription(description);
+            Closed = false;
+            SetStatus(Status.ToDo);
         }
 
         public void Rename(string name)
@@ -44,6 +48,16 @@ namespace ProjectManagement.API.Domain.Issues.Entities
             {
                 Description = description;
             }
+        }
+
+        public void Close()
+        {
+            Closed = true;
+        }
+
+        public void SetStatus(Status s)
+        {
+            Status = s;
         }
     }
 }
