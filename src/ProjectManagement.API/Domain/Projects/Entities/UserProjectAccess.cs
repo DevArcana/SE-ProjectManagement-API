@@ -1,31 +1,33 @@
-﻿using ProjectManagement.API.Domain.Users.Entities;
+﻿using ProjectManagement.API.Common.Exceptions;
+using ProjectManagement.API.Domain.Users.Entities;
 
 namespace ProjectManagement.API.Domain.Projects.Entities
 {
     public class UserProjectAccess
     {
-        public ApplicationUser User { get; private set; }
-        public Project Project { get; private set; }
+        public ApplicationUser User { get; }
+        public string UserId { get; }
+        public Project Project { get; }
+        public long ProjectId { get; }
 
         private UserProjectAccess()
         {
             
         }
 
-        private UserProjectAccess(ApplicationUser u, Project p)
+        private UserProjectAccess(ApplicationUser user, Project project)
         {
-            AssignUser(u);
-            AssignProject(p);
-        }
+            if (user.Id == project.Manager.Id)
+            {
+                throw new PropertyValidationException(nameof(user),
+                    "This user is the manager of this project, can't grant access.");
+            }
 
-        public void AssignProject(Project p)
-        {
-            Project = p;
-        }
+            User = user;
+            UserId = user.Id;
 
-        public void AssignUser(ApplicationUser u)
-        {
-            User = u;
+            Project = project;
+            ProjectId = project.Id;
         }
     }
 }
