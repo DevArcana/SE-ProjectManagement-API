@@ -157,7 +157,7 @@ namespace ProjectManagement.API.Infrastructure.Persistence.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<bool>("Closed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Description")
                         .HasMaxLength(5000)
@@ -172,7 +172,7 @@ namespace ProjectManagement.API.Infrastructure.Persistence.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

@@ -10,7 +10,7 @@ using ProjectManagement.API.Infrastructure.Persistence;
 namespace ProjectManagement.API.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210114105521_InitialCreate")]
+    [Migration("20210115131356_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,6 +158,9 @@ namespace ProjectManagement.API.Infrastructure.Persistence.Migrations
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
 
+                    b.Property<bool>("Closed")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Description")
                         .HasMaxLength(5000)
                         .HasColumnType("character varying(5000)");
@@ -169,6 +172,9 @@ namespace ProjectManagement.API.Infrastructure.Persistence.Migrations
 
                     b.Property<long>("ProjectId")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
