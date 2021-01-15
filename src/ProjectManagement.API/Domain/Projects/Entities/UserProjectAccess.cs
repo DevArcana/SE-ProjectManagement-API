@@ -14,9 +14,18 @@ namespace ProjectManagement.API.Domain.Projects.Entities
 
         private UserProjectAccess(ApplicationUser u, Project p)
         {
-            User = u;
+            AssignUser(u);
+            AssignProject(p);
+        }
+
+        public void AssignProject(Project p)
+        {
             Project = p;
         }
-        
+
+        public void AssignUser(ApplicationUser u)
+        {
+            User = u;
+        }
     }
 }
