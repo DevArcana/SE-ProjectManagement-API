@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+
+env:
+  HEROKU_APP_NAME: seprojectmanagementapi
+  NETCORE_VERSION: '5.0.101'
+
+jobs:
+  build:
+    runs-on: ubuntu-16.04
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup .NET Core SDK ${{ env.NETCORE_VERSION }}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.NETCORE_VERSION }}
+
+      - name: Restore packages
+        run: dotnet restore
+
+      - name: Build app
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Publish app for deploy
+        run: dotnet publish --configuration Release --no-build --output publish
+      
+      - name: Dockerize and deploy
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+          heroku container:push web -a ${{ env.HEROKU_APP_NAME }}
+          heroku container:release web -a ${{ env.HEROKU_APP_NAME }}
