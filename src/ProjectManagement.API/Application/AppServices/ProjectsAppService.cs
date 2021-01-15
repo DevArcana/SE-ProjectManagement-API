@@ -81,10 +81,11 @@ namespace ProjectManagement.API.Application.AppServices
             return collaborator == null ? null : _mapper.Map<CollaboratorDto>(collaborator);
         }
         
-        public Task<CollaboratorDto> DeleteCollaboratorAsync(ApplicationUser user, long projectId, string userName,
+        public async Task<CollaboratorDto> DeleteCollaboratorAsync(ApplicationUser user, long projectId, string userName,
             CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var collaborator  = await _projectsService.DeleteCollaboratorAsync(user, projectId, userName, cancellationToken);
+            return collaborator == null ? null : _mapper.Map<CollaboratorDto>(collaborator);
         }
     }
 }

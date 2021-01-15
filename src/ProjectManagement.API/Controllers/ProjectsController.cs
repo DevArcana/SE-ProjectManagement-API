@@ -143,10 +143,26 @@ namespace ProjectManagement.API.Controllers
             return Ok(collaborator);
         }
         
-        [HttpDelete("{id}/collaborators")]
-        public async Task<IActionResult> DeleteCollaborator(string name)
+        [HttpDelete("{projectId}/collaborators")]
+        public async Task<IActionResult> DeleteCollaborator(long projectId, string name)
         {
-            return Ok();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var collaborator = await _projectsAppService.DeleteCollaboratorAsync(user, projectId, name);
+
+            if (collaborator == null)
+            {
+                var problem = new ProblemDetails
+                {
+                    Instance = HttpContext.Request.Path,
+                    Status = StatusCodes.Status404NotFound,
+                    Type = $"https://httpstatuses.com/404",
+                    Title = "Not found",
+                    Detail = $"Collaborator {name} does not collaborate in this project."
+                };
+
+                return NotFound(problem);
+            }
+            return Ok(collaborator);
         }
     }
 }

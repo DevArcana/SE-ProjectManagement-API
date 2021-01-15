@@ -145,9 +145,22 @@ namespace ProjectManagement.API.Domain.Projects.Services
                 .Where(x => x.UserId == user.UserName && x.ProjectId == projectId);
         }
 
-        public Task<UserProjectAccess> DeleteCollaboratorAsync(ApplicationUser user, long projectId, string name)
+        public async Task<UserProjectAccess> DeleteCollaboratorAsync(ApplicationUser user, long projectId, string name, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            var collaborator = await _context.UserProjectAccesses
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.UserId == name && x.ProjectId == projectId, cancellationToken);
+
+            if (collaborator == null)
+            {
+                return null;
+            }
+
+            _context.Attach(collaborator);
+            _context.Entry(collaborator).State = EntityState.Deleted;
+            await _context.SaveChangesAsync(cancellationToken);
+            
+            return collaborator;
         }
     }
 }
