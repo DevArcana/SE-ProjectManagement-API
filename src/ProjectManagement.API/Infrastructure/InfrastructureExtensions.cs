@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using ProjectManagement.API.Infrastructure.Persistence;
 
 namespace ProjectManagement.API.Infrastructure
@@ -14,10 +16,34 @@ namespace ProjectManagement.API.Infrastructure
             
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("SQLServer"));
+                options.UseNpgsql(GetHerokuDbConnection() ?? configuration.GetConnectionString("Database"));
             });
             
             return services;
+        }
+        
+        private static string GetHerokuDbConnection()
+        {
+            var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+            if (databaseUrl == null)
+            {
+                return null;
+            }
+            
+            var databaseUri = new Uri(databaseUrl);
+            var userInfo = databaseUri.UserInfo.Split(':');
+
+            var builder = new NpgsqlConnectionStringBuilder
+            {
+                Host = databaseUri.Host,
+                Port = databaseUri.Port,
+                Username = userInfo[0],
+                Password = userInfo[1],
+                Database = databaseUri.LocalPath.TrimStart('/')
+            };
+
+            return builder.ToString();
         }
     }
 }

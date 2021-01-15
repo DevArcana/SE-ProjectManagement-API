@@ -1,0 +1,1 @@
+docker run --name postgres -e POSTGRES_PASSWORD=Po$TGr3s -d postgres
