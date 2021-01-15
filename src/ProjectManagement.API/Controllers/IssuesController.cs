@@ -98,7 +98,8 @@ namespace ProjectManagement.API.Controllers
         public async Task<IActionResult> UpdateIssue(long projectId,  [FromBody] IssueDto dto)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var issue = await _issuesAppService.UpdateIssueAsync(user, projectId, dto.Id, dto.Name, dto.Description);
+            
+            var issue = await _issuesAppService.UpdateIssueAsync(user, projectId, dto.Id, dto.Name, dto.Description, dto.Closed, dto.Status);
 
             if (issue == null)
             {
