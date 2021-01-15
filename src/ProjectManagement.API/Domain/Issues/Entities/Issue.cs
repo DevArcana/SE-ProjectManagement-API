@@ -24,7 +24,7 @@ namespace ProjectManagement.API.Domain.Issues.Entities
             Project = project;
             Rename(name);
             ChangeDescription(description);
-            Closed = false;
+            CloseOrReopenIssue(false);
             SetStatus(Status.ToDo);
         }
 
@@ -50,9 +50,9 @@ namespace ProjectManagement.API.Domain.Issues.Entities
             }
         }
 
-        public void CloseIssue()
+        public void CloseOrReopenIssue(bool b)
         {
-            Closed = true;
+            Closed = b;
         }
 
         public void SetStatus(Status s)
