@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.API.Application.Interfaces;
 using ProjectManagement.API.Application.Models;
+using ProjectManagement.API.Domain.Issues.Entities;
 using ProjectManagement.API.Domain.Issues.Interfaces;
 using ProjectManagement.API.Domain.Users.Entities;
 
@@ -51,9 +52,9 @@ namespace ProjectManagement.API.Application.AppServices
         }
 
         public async Task<IssueDto> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name, string description,
-            CancellationToken cancellationToken = default)
+            bool closed, Status status, CancellationToken cancellationToken = default)
         {
-            var issue = await _issuesService.UpdateIssueAsync(user, projectId, issueId, name, description, cancellationToken);
+            var issue = await _issuesService.UpdateIssueAsync(user, projectId, issueId, name, description, closed, status, cancellationToken);
             return issue == null ? null : _mapper.Map<IssueDto>(issue);
         }
 

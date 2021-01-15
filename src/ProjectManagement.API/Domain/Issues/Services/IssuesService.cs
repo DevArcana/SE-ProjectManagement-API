@@ -87,8 +87,8 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 .Where(x => x.Project.Id == projectId);
         }
 
-        public async Task<Issue> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name, string description,
-            CancellationToken cancellationToken = default)
+        public async Task<Issue> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name, 
+            string description, bool closed, Status status, CancellationToken cancellationToken = default)
         {
             var project = await _projectsService.GetProjectByIdAsync(user, projectId, cancellationToken);
 
@@ -120,6 +120,8 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 issue.Rename(name);
             }
             issue.ChangeDescription(description);
+            issue.CloseOrReopenIssue(closed);
+            issue.SetStatus(status);
             await _context.SaveChangesAsync(cancellationToken);
             
             return issue;
