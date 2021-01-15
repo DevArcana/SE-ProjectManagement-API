@@ -87,7 +87,7 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 .Where(x => x.Project.Id == projectId);
         }
 
-        public async Task<Issue> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name, 
+        public async Task<Issue> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name,
             string description, bool closed, Status status, CancellationToken cancellationToken = default)
         {
             var project = await _projectsService.GetProjectByIdAsync(user, projectId, cancellationToken);
@@ -98,18 +98,18 @@ namespace ProjectManagement.API.Domain.Issues.Services
             }
 
             _context.Attach(project);
-            
+
             var issue = await _context.Issues
                 .Include(x => x.Project)
                 .FirstOrDefaultAsync(x => x.Id == issueId, cancellationToken);
-           
+
             if (issue == null)
             {
                 return null;
             }
-            
+
             _context.Issues.Attach(issue);
-            
+
             if (projectId != issue.Project.Id)
             {
                 return null;
@@ -119,10 +119,13 @@ namespace ProjectManagement.API.Domain.Issues.Services
             {
                 issue.Rename(name);
             }
+
             issue.ChangeDescription(description);
-            
-            issue.CloseOrReopenIssue(closed);
-          
+            if (closed)
+            {
+                issue.Close();
+            }
+
             issue.SetStatus(status);
           
             await _context.SaveChangesAsync(cancellationToken);
