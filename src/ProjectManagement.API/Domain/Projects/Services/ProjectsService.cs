@@ -114,7 +114,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
             }
             
             var collabUser = await _context.Users.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.UserName == name, cancellationToken);
+                .FirstOrDefaultAsync(x => x.UserName == name && x.Id!=project.Manager.Id, cancellationToken);
             if (collabUser == null)
             {
                 return null;
