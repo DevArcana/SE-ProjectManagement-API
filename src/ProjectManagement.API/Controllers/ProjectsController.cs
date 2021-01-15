@@ -113,12 +113,20 @@ namespace ProjectManagement.API.Controllers
             return Ok(projects);
         }
 
-        [HttpPost("{id}/collaborators")]
-        public async Task<IActionResult> AddCollaborator([FromBody] CollaboratorDto dto)
+        [HttpPost("{projectId}/collaborators")]
+        public async Task<IActionResult> AddCollaborator(long projectId, [FromBody] CollaboratorDto dto)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var collaborator = await _projectsAppService.AddCollaboratorAsync(user, projectId, dto.UserId);
+            return CreatedAtAction(nameof(GetCollaboratorByName), new {Id = collaborator.UserId}, collaborator);
+        }
+
+        [HttpGet("{projectId}/collaborators/{userName}")]
+        public async Task<IActionResult> GetCollaboratorByName(long projectId, string userName)
         {
             return Ok();
         }
-
+        
         [HttpDelete("{id}/collaborators")]
         public async Task<IActionResult> DeleteCollaborator(string name)
         {

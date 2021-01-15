@@ -16,6 +16,8 @@ namespace ProjectManagement.API.Domain.Projects.Interfaces
 
         Task<UserProjectAccess> AddCollaboratorAsync(ApplicationUser user, long projectId, string name,
             CancellationToken cancellationToken = default);
+        Task<UserProjectAccess> GetCollaboratorByNameAsync(ApplicationUser user, long projectId, string name,
+            CancellationToken cancellationToken = default);
         IQueryable<UserProjectAccess> GetCollaborators(ApplicationUser user, long projectId);
         Task<UserProjectAccess> DeleteCollaboratorAsync(ApplicationUser user, long projectId, string name);
     }

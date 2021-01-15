@@ -15,7 +15,7 @@ namespace ProjectManagement.API.Domain.Projects.Entities
             
         }
 
-        private UserProjectAccess(ApplicationUser user, Project project)
+        public UserProjectAccess(ApplicationUser user, Project project)
         {
             if (user.Id == project.Manager.Id)
             {

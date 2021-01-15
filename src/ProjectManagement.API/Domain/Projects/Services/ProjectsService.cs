@@ -97,9 +97,45 @@ namespace ProjectManagement.API.Domain.Projects.Services
             
             return project;
         }
-        public Task<UserProjectAccess> AddCollaboratorAsync(ApplicationUser user, long projectId, string name, CancellationToken cancellationToken = default)
+        public async Task<UserProjectAccess> AddCollaboratorAsync(ApplicationUser user, long projectId, string name, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var collaborator = await  _context.UserProjectAccesses.AsNoTracking()
+                    .FirstOrDefaultAsync(x =>  x.UserId == name && x.ProjectId == projectId, cancellationToken);
+            if (collaborator != null)
+            {
+                throw new EntityAlreadyExistsException("User is already collaborator", $"User {user.UserName} is already collaborator of project {projectId}");
+            }
+            
+            var project = await _context.Projects.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == projectId && x.Manager.Id == user.Id, cancellationToken);
+            if (project == null)
+            {
+                return null;
+            }
+            var collabUser = await _context.Users.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.UserName == name, cancellationToken);
+            if (collabUser == null)
+            {
+                return null;
+            }
+            collaborator = new UserProjectAccess(collabUser, project);
+
+            _context.Add(collaborator);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            _logger.LogInformation($"{name} added as collaborator to  project {project.Name}", project.Manager.UserName, project.Name);
+            
+            return collaborator;
+        }
+
+        public async Task<UserProjectAccess> GetCollaboratorByNameAsync(ApplicationUser user, long projectId,
+            string name, CancellationToken cancellationToken = default)
+        {
+            var collaborator = await _context.UserProjectAccesses
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.UserId == name && x.ProjectId == projectId, cancellationToken);
+
+            return collaborator;
         }
 
         public IQueryable<UserProjectAccess> GetCollaborators(ApplicationUser user, long projectId)
