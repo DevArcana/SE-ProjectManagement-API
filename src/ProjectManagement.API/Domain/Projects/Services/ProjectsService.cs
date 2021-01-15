@@ -100,7 +100,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
         public async Task<UserProjectAccess> AddCollaboratorAsync(ApplicationUser user, long projectId, string name, CancellationToken cancellationToken = default)
         {
             var collaborator = await  _context.UserProjectAccess.AsNoTracking()
-                    .FirstOrDefaultAsync(x =>  x.UserId == name && x.ProjectId == projectId, cancellationToken);
+                    .FirstOrDefaultAsync(x =>  x.User.UserName == name && x.ProjectId == projectId, cancellationToken);
             if (collaborator != null)
             {
                 throw new EntityAlreadyExistsException("User is already collaborator", $"User {user.UserName} is already collaborator of project {projectId}");
@@ -133,7 +133,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
         {
             var collaborator = await _context.UserProjectAccess
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.UserId == name && x.ProjectId == projectId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.User.UserName == name && x.ProjectId == projectId, cancellationToken);
 
             return collaborator;
         }
@@ -142,14 +142,14 @@ namespace ProjectManagement.API.Domain.Projects.Services
         {
             return _context.UserProjectAccess
                 .AsNoTracking()
-                .Where(x => x.UserId == user.UserName && x.ProjectId == projectId);
+                .Where(x => x.User.UserName == user.UserName && x.ProjectId == projectId);
         }
 
         public async Task<UserProjectAccess> DeleteCollaboratorAsync(ApplicationUser user, long projectId, string name, CancellationToken cancellationToken)
         {
             var collaborator = await _context.UserProjectAccess
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.UserId == name && x.ProjectId == projectId && x.Project.Manager.Id == user.Id, cancellationToken);
+                .FirstOrDefaultAsync(x => x.User.UserName == name && x.ProjectId == projectId && x.Project.Manager.Id == user.Id, cancellationToken);
 
             if (collaborator == null)
             {

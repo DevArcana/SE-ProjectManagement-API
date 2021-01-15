@@ -5,6 +5,6 @@ namespace ProjectManagement.API.Application.Models
 {
     public class CollaboratorDto : IMapFrom<UserProjectAccess>
     {
-        public string UserId { get; set; }
+        public string UserName { get; set; }
     }
 }
