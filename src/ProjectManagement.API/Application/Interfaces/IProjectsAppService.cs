@@ -14,6 +14,14 @@ namespace ProjectManagement.API.Application.Interfaces
         Task<ProjectDto> DeleteProjectAsync(ApplicationUser user, long projectId,
             CancellationToken cancellationToken = default);
         Task<ProjectDto> UpdateProjectAsync(ApplicationUser user, long projectId, string name, CancellationToken cancellationToken = default);
+        Task<IEnumerable<CollaboratorDto>> GetCollaboratorsAsync(ApplicationUser user, long projectId,
+            CancellationToken cancellationToken = default);
+        Task<CollaboratorDto> AddCollaboratorAsync(ApplicationUser user, long projectId, string userName,
+            CancellationToken cancellationToken = default);
+        Task<CollaboratorDto> GetCollaboratorByNameAsync(ApplicationUser user, long projectId, string name,
+            CancellationToken cancellationToken = default);
+        Task<CollaboratorDto> DeleteCollaboratorAsync(ApplicationUser user, long projectId, string userName,
+            CancellationToken cancellationToken = default);
 
     }
 }
