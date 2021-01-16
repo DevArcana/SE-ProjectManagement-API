@@ -60,7 +60,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
             var collaborated = _context.UserProjectAccess
                 .AsNoTracking()
                 .Where(x => x.UserId == user.Id).Select(x=>x.Project);
-            return managed.Concat(collaborated);
+            return managed.Concat(collaborated).OrderBy(x => x.Id);
         }
 
         public async Task<Project> UpdateProjectAsync(ApplicationUser user, long projectId, string name,

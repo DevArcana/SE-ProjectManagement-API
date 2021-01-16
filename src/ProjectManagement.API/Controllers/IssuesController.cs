@@ -141,12 +141,12 @@ namespace ProjectManagement.API.Controllers
             return Ok(issues);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateIssue(long projectId,  [FromBody] IssueDto dto)
+        [HttpPut("{issueId}")]
+        public async Task<IActionResult> UpdateIssue(long projectId, long issueId, [FromBody] IssueDto dto)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             
-            var issue = await _issuesAppService.UpdateIssueAsync(user, projectId, dto.Id, dto.Name, dto.Description, dto.Closed, dto.Status);
+            var issue = await _issuesAppService.UpdateIssueAsync(user, projectId, issueId, dto.Name, dto.Description, dto.Closed, dto.Status);
 
             if (issue == null)
             {

@@ -86,7 +86,8 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 .Include(x => x.Project)
                 .ThenInclude(x => x.Manager)
                 .Include(x => x.Assignee)
-                .Where(x => x.Project.Id == projectId);
+                .Where(x => x.Project.Id == projectId)
+                .OrderBy(x => x.Id);
         }
 
         public async Task<Issue> UpdateIssueAsync(ApplicationUser user, long projectId, long issueId, string name,

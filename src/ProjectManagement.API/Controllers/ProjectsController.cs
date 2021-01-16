@@ -85,11 +85,11 @@ namespace ProjectManagement.API.Controllers
             return Ok(project);
         }
         
-        [HttpPut]
-        public async Task<IActionResult> EditProject([FromBody] ProjectDto dto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditProject(long id, [FromBody] ProjectDto dto)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var project = await _projectsAppService.UpdateProjectAsync(user, dto.Id, dto.Name);
+            var project = await _projectsAppService.UpdateProjectAsync(user, id, dto.Name);
             if (project == null)
             {
                 var problem = new ProblemDetails
