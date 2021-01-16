@@ -53,6 +53,7 @@ namespace ProjectManagement.API.Controllers
             }
             return Ok(project);
         }
+        
         [HttpGet]
         public async Task<IActionResult> GetProjects()
         {
@@ -83,6 +84,7 @@ namespace ProjectManagement.API.Controllers
             }
             return Ok(project);
         }
+        
         [HttpPut]
         public async Task<IActionResult> EditProject([FromBody] ProjectDto dto)
         {
@@ -101,6 +103,66 @@ namespace ProjectManagement.API.Controllers
                 return NotFound(problem);
             }
             return Ok(project);
+        }
+
+        [HttpGet("{projectId}/collaborators")]
+        public async Task<IActionResult> GetCollaborators(long projectId)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var projects = await _projectsAppService.GetCollaboratorsAsync(user, projectId);
+            return Ok(projects);
+        }
+
+        [HttpPost("{projectId}/collaborators")]
+        public async Task<IActionResult> AddCollaborator(long projectId, [FromBody] CollaboratorDto dto)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var collaborator = await _projectsAppService.AddCollaboratorAsync(user, projectId, dto.UserName);
+            return CreatedAtAction(nameof(GetCollaboratorByName), new {projectId = projectId, userName = dto.UserName}, collaborator);
+        }
+
+        [HttpGet("{projectId}/collaborators/{userName}")]
+        public async Task<IActionResult> GetCollaboratorByName(long projectId, string userName)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var collaborator = await _projectsAppService.GetCollaboratorByNameAsync(user, projectId, userName);
+
+            if (collaborator == null)
+            {
+                var problem = new ProblemDetails
+                {
+                    Instance = HttpContext.Request.Path,
+                    Status = StatusCodes.Status404NotFound,
+                    Type = $"https://httpstatuses.com/404",
+                    Title = "Not found",
+                    Detail = $"Collaborator {userName} does not collaborate in this project."
+                };
+
+                return NotFound(problem);
+            }
+            return Ok(collaborator);
+        }
+        
+        [HttpDelete("{projectId}/collaborators")]
+        public async Task<IActionResult> DeleteCollaborator(long projectId, string name)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var collaborator = await _projectsAppService.DeleteCollaboratorAsync(user, projectId, name);
+
+            if (collaborator == null)
+            {
+                var problem = new ProblemDetails
+                {
+                    Instance = HttpContext.Request.Path,
+                    Status = StatusCodes.Status404NotFound,
+                    Type = $"https://httpstatuses.com/404",
+                    Title = "Not found",
+                    Detail = $"Collaborator {name} does not collaborate in this project."
+                };
+
+                return NotFound(problem);
+            }
+            return Ok(collaborator);
         }
     }
 }
