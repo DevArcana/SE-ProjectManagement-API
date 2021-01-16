@@ -22,7 +22,7 @@ namespace ProjectManagement.API.Domain.Issues.Entities
 
         public Issue(Project project, string name, string description)
         {
-            Project = project;
+            Project = project ?? throw new PropertyValidationException(nameof(project), "Project must not be null!");
             Rename(name);
             ChangeDescription(description);
             Closed = false;
