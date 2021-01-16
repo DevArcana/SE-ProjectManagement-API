@@ -118,7 +118,7 @@ namespace ProjectManagement.API.Controllers
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var collaborator = await _projectsAppService.AddCollaboratorAsync(user, projectId, dto.UserName);
-            return CreatedAtAction(nameof(GetCollaboratorByName), new {Id = collaborator.UserName}, collaborator);
+            return CreatedAtAction(nameof(GetCollaboratorByName), new {projectId = projectId, userName = dto.UserName}, collaborator);
         }
 
         [HttpGet("{projectId}/collaborators/{userName}")]
