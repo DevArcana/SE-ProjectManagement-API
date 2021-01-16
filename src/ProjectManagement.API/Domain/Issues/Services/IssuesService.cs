@@ -54,6 +54,7 @@ namespace ProjectManagement.API.Domain.Issues.Services
         {
             var issue = await _context.Issues
                 .Include(x => x.Project)
+                .ThenInclude(x => x.Manager)
                 .Include(x => x.Assignee)
                 .FirstOrDefaultAsync(x => x.Id == issueId, cancellationToken);
 
@@ -167,7 +168,7 @@ namespace ProjectManagement.API.Domain.Issues.Services
             return issue;
         }
 
-        public async Task<IQueryable<ApplicationUser>> GetAssignableUsers(ApplicationUser user, long projectId, long issueId,
+        public async Task<IEnumerable<ApplicationUser>> GetAssignableUsers(ApplicationUser user, long projectId, long issueId,
             CancellationToken cancellationToken = default)
         {
             var issue = await GetIssueByIdAsync(user, projectId, issueId, cancellationToken);
@@ -178,14 +179,17 @@ namespace ProjectManagement.API.Domain.Issues.Services
             }
             
             // TODO: Respect the access table
-            var users = _context.Users.Where(user => _context.Projects.Any(project => project.Manager == user));
+            var users = await _context.UserProjectAccess
+                .Where(x => x.ProjectId == projectId)
+                .Include(x => x.User)
+                .Select(x => x.User)
+                .ToListAsync(cancellationToken);
 
-            if (issue.Assignee != null)
-            {
-                users = users.Where(x => x.Id != issue.Assignee.Id);
-            }
+            users = users
+                .Append(user)
+                .Where(x => x.Id != issue.Assignee?.Id).ToList();
 
-            return users;
+            return users.AsQueryable();
         }
 
         public async Task<bool> AssignUserToIssue(ApplicationUser user, long projectId, long issueId, string username,
@@ -198,8 +202,18 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 return false;
             }
 
+            var users = await _context.UserProjectAccess
+                .Where(x => x.ProjectId == projectId)
+                .Include(x => x.User)
+                .Select(x => x.User)
+                .ToListAsync(cancellationToken);
+
+            users = users
+                .Append(user)
+                .Where(x => x.Id != issue.Assignee?.Id).ToList();
+            
             // TODO: Respect the access table
-            var assignee = await _context.Users.FirstOrDefaultAsync(x => x.UserName == username, cancellationToken);
+            var assignee = users.FirstOrDefault(x => x.UserName == username);
 
             if (assignee == null)
             {

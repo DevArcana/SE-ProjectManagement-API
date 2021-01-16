@@ -6,12 +6,12 @@ namespace ProjectManagement.API.Application.Models
 {
     public class CollaboratorDto : IMapFrom<UserProjectAccess>
     {
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<UserProjectAccess, CollaboratorDto>()
-                .ForMember(dest => dest.UserName, 
+                .ForMember(dest => dest.Username, 
                     opt => opt.MapFrom(s=>s.User.UserName));
         }
     }

@@ -72,10 +72,10 @@ namespace ProjectManagement.API.Controllers
         }
 
         [HttpPost("{issueId}/assign")]
-        public async Task<IActionResult> AssignUserToIssue(long projectId, long issueId, [FromBody] string username)
+        public async Task<IActionResult> AssignUserToIssue(long projectId, long issueId, [FromBody] AssignableUserDto dto)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var result = await _issuesAppService.AssignUserToIssue(user, projectId, issueId, username);
+            var result = await _issuesAppService.AssignUserToIssue(user, projectId, issueId, dto.Username);
 
             if (!result)
             {
