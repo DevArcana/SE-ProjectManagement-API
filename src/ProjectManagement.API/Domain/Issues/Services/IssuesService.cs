@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProjectManagement.API.Common.Exceptions;
 using ProjectManagement.API.Domain.Issues.Entities;
 using ProjectManagement.API.Domain.Issues.Interfaces;
 using ProjectManagement.API.Domain.Projects.Interfaces;
@@ -54,6 +51,8 @@ namespace ProjectManagement.API.Domain.Issues.Services
         {
             var issue = await _context.Issues
                 .Include(x => x.Project)
+                .ThenInclude(x => x.Manager)
+                .Include(x => x.Assignee)
                 .FirstOrDefaultAsync(x => x.Id == issueId, cancellationToken);
 
             if (issue == null)
@@ -84,6 +83,9 @@ namespace ProjectManagement.API.Domain.Issues.Services
 
             return _context.Issues
                 .AsNoTracking()
+                .Include(x => x.Project)
+                .ThenInclude(x => x.Manager)
+                .Include(x => x.Assignee)
                 .Where(x => x.Project.Id == projectId);
         }
 
@@ -164,6 +166,72 @@ namespace ProjectManagement.API.Domain.Issues.Services
             await _context.SaveChangesAsync(cancellationToken);
 
             return issue;
+        }
+
+        public async Task<IEnumerable<ApplicationUser>> GetAssignableUsers(ApplicationUser user, long projectId, long issueId,
+            CancellationToken cancellationToken = default)
+        {
+            var issue = await GetIssueByIdAsync(user, projectId, issueId, cancellationToken);
+
+            if (issue == null)
+            {
+                return null;
+            }
+            
+            // TODO: Respect the access table
+            var users = await _context.UserProjectAccess
+                .Where(x => x.ProjectId == projectId)
+                .Include(x => x.User)
+                .Select(x => x.User)
+                .ToListAsync(cancellationToken);
+
+            users = users
+                .Append(user)
+                .Where(x => x.Id != issue.Assignee?.Id).ToList();
+
+            return users.AsQueryable();
+        }
+
+        public async Task<bool> AssignUserToIssue(ApplicationUser user, long projectId, long issueId, string username,
+            CancellationToken cancellationToken = default)
+        {
+            var issue = await GetIssueByIdAsync(user, projectId, issueId, cancellationToken);
+
+            if (issue == null)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                issue.AssignUser(null);
+            }
+            else
+            {
+                var users = await _context.UserProjectAccess
+                    .Where(x => x.ProjectId == projectId)
+                    .Include(x => x.User)
+                    .Select(x => x.User)
+                    .ToListAsync(cancellationToken);
+
+                users = users
+                    .Append(user)
+                    .Where(x => x.Id != issue.Assignee?.Id).ToList();
+            
+                // TODO: Respect the access table
+                var assignee = users.FirstOrDefault(x => x.UserName == username);
+
+                if (assignee == null)
+                {
+                    return false;
+                }
+
+                issue.AssignUser(assignee);
+            }
+            
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return true;
         }
     }
 }

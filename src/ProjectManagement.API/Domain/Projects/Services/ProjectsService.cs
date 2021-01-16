@@ -45,7 +45,6 @@ namespace ProjectManagement.API.Domain.Projects.Services
 
         public async Task<Project> GetProjectByIdAsync(ApplicationUser user, long id, CancellationToken cancellationToken = default)
         {
-            // TODO: Add access lists instead of relying on being a manager
             var projects = GetProjects(user);
             var project = await projects
                 .AsNoTracking()

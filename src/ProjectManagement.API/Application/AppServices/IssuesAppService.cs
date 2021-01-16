@@ -64,5 +64,18 @@ namespace ProjectManagement.API.Application.AppServices
             var issue = await _issuesService.DeleteIssueAsync(user, projectId, issueId, cancellationToken);
             return issue == null ? null : _mapper.Map<IssueDto>(issue);
         }
+
+        public async Task<IEnumerable<AssignableUserDto>> GetAssignableUsers(ApplicationUser user, long projectId, long issueId,
+            CancellationToken cancellationToken = default)
+        {
+            var users = await _issuesService.GetAssignableUsers(user, projectId, issueId, cancellationToken);
+            return users?.Select(x => _mapper.Map<AssignableUserDto>(x)).ToList();
+        }
+
+        public Task<bool> AssignUserToIssue(ApplicationUser user, long projectId, long issueId, string username,
+            CancellationToken cancellationToken = default)
+        {
+            return _issuesService.AssignUserToIssue(user, projectId, issueId, username, cancellationToken);
+        }
     }
 }

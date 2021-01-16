@@ -13,6 +13,7 @@ namespace ProjectManagement.API.Domain.Issues.Entities
         public string Description { get; private set; }
         public bool Closed { get; private set; }
         public Status Status { get; private set; }
+        public ApplicationUser Assignee { get; private set; }
 
         private Issue()
         {
@@ -25,6 +26,7 @@ namespace ProjectManagement.API.Domain.Issues.Entities
             Rename(name);
             ChangeDescription(description);
             Closed = false;
+            Assignee = null;
             SetStatus(Status.ToDo);
         }
 
@@ -36,6 +38,11 @@ namespace ProjectManagement.API.Domain.Issues.Entities
             }
             
             Name = name;
+        }
+
+        public void AssignUser(ApplicationUser user)
+        {
+            Assignee = user;
         }
 
         public void ChangeDescription(string description)
