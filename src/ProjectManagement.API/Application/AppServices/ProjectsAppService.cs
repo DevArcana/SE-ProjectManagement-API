@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.API.Application.Interfaces;
 using ProjectManagement.API.Application.Models;
+using ProjectManagement.API.Domain.Projects.Entities;
 using ProjectManagement.API.Domain.Projects.Interfaces;
 using ProjectManagement.API.Domain.Users.Entities;
 
