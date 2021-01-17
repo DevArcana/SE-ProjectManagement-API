@@ -65,10 +65,10 @@ namespace ProjectManagement.API.Application.AppServices
             return issue == null ? null : _mapper.Map<IssueDto>(issue);
         }
 
-        public async Task<IEnumerable<AssignableUserDto>> GetAssignableUsers(ApplicationUser user, long projectId, long issueId,
+        public async Task<IEnumerable<AssignableUserDto>> GetAssignableUsers(ApplicationUser user, long projectId,
             CancellationToken cancellationToken = default)
         {
-            var users = await _issuesService.GetAssignableUsers(user, projectId, issueId, cancellationToken);
+            var users = await _issuesService.GetAssignableUsers(user, projectId, cancellationToken);
             return users?.Select(x => _mapper.Map<AssignableUserDto>(x)).ToList();
         }
 

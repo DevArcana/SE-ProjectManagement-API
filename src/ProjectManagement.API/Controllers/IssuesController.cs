@@ -47,12 +47,12 @@ namespace ProjectManagement.API.Controllers
             return CreatedAtAction(nameof(GetIssueById), new {ProjectId = projectId, IssueId = issue.Id}, issue);
         }
 
-        [HttpGet("{issueId}/assignable")]
-        public async Task<IActionResult> GetAssignableUsers(long projectId, long issueId)
+        [HttpGet("/api/projects/{projectId}/assignable")]
+        public async Task<IActionResult> GetAssignableUsers(long projectId)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             
-            var users = await _issuesAppService.GetAssignableUsers(user, projectId, issueId);
+            var users = await _issuesAppService.GetAssignableUsers(user, projectId);
 
             if (users == null)
             {

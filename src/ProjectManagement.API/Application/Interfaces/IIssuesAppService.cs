@@ -16,7 +16,7 @@ namespace ProjectManagement.API.Application.Interfaces
             string description, bool closed, Status status, CancellationToken cancellationToken = default);
         Task<IssueDto> DeleteIssueAsync(ApplicationUser user, long projectId, long issueId,
             CancellationToken cancellationToken = default);
-        Task<IEnumerable<AssignableUserDto>> GetAssignableUsers(ApplicationUser user, long projectId, long issueId,
+        Task<IEnumerable<AssignableUserDto>> GetAssignableUsers(ApplicationUser user, long projectId,
             CancellationToken cancellationToken = default);
         Task<bool> AssignUserToIssue(ApplicationUser user, long projectId, long issueId, string username,
             CancellationToken cancellationToken = default);

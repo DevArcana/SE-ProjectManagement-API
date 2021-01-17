@@ -169,12 +169,11 @@ namespace ProjectManagement.API.Domain.Issues.Services
             return issue;
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetAssignableUsers(ApplicationUser user, long projectId, long issueId,
-            CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ApplicationUser>> GetAssignableUsers(ApplicationUser user, long projectId, CancellationToken cancellationToken = default)
         {
-            var issue = await GetIssueByIdAsync(user, projectId, issueId, cancellationToken);
+            var project = await _projectsService.GetProjectByIdAsync(user, projectId, cancellationToken);
 
-            if (issue == null)
+            if (project == null)
             {
                 return null;
             }
@@ -187,8 +186,8 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 .ToListAsync(cancellationToken);
 
             users = users
-                .Append(user)
-                .Where(x => x.Id != issue.Assignee?.Id).ToList();
+                .Append(project.Manager)
+                .ToList();
 
             return users.AsQueryable();
         }
