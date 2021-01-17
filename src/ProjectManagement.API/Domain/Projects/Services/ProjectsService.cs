@@ -47,7 +47,7 @@ namespace ProjectManagement.API.Domain.Projects.Services
         {
             var projects = GetProjects(user);
             var project = await projects
-                .AsNoTracking()
+                .Include(x => x.Manager)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
             return project;
