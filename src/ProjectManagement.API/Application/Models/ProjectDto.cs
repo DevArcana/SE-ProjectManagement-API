@@ -1,4 +1,5 @@
-﻿using ProjectManagement.API.Domain.Projects.Entities;
+﻿using AutoMapper;
+using ProjectManagement.API.Domain.Projects.Entities;
 using ProjectManagement.API.Infrastructure.AutoMapper;
 
 namespace ProjectManagement.API.Application.Models
@@ -7,5 +8,6 @@ namespace ProjectManagement.API.Application.Models
     {
         public long Id { get; set; }
         public string Name { get; set; }
+        public bool CanManage { get; set; }
     }
 }

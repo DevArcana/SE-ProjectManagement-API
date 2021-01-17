@@ -35,7 +35,14 @@ namespace ProjectManagement.API.Application.AppServices
         public async Task<ProjectDto> GetProjectByIdAsync(ApplicationUser user, long id, CancellationToken cancellationToken = default)
         {
             var project = await _projectsService.GetProjectByIdAsync(user, id, cancellationToken);
-            return project == null ? null : _mapper.Map<ProjectDto>(project);
+            var result = project == null ? null : _mapper.Map<ProjectDto>(project);
+
+            if (result != null)
+            {
+                result.CanManage = project.Manager.Id == user.Id;
+            }
+
+            return result;
         }
 
         public async Task<IEnumerable<ProjectDto>> GetProjectsAsync(ApplicationUser user, CancellationToken cancellationToken = default)
