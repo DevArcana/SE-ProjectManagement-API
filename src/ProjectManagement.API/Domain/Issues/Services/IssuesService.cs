@@ -34,8 +34,8 @@ namespace ProjectManagement.API.Domain.Issues.Services
                 return null;
             }
 
-            _context.Attach(project);
-            
+            project = await _context.Projects.FirstOrDefaultAsync(x => x.Id == project.Id, cancellationToken);
+
             var issue = new Issue(project, name, description);
             
             _context.Issues.Add(issue);
